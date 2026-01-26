@@ -362,11 +362,81 @@
             <div class="contact-info">
                 <h3>Get In Touch</h3>
                 <p>I'm open to working on projects that help brands and businesses tell their stories creatively. Whether it's photography, copywriting, marketing strategy, or cultural projects - let's talk.</p>
+                <form id="contact-form" class="contact-form">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone" placeholder="+1 555 555 5555">
+                        </div>
+                        <div class="form-field">
+                            <label for="company">Company/Organization</label>
+                            <input type="text" id="company" name="company" placeholder="Optional">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="service">What do you need?</label>
+                            <select id="service" name="service" required>
+                                <option value="" disabled selected>Select a service</option>
+                                <option>Photography & Visual Communication</option>
+                                <option>Copywriting & Content Creation</option>
+                                <option>Marketing Strategy & Campaign Management</option>
+                                <option>Creative Direction & Art Direction</option>
+                                <option>Cultural Projects & Collaborations</option>
+                                <option>Spoken Word Performances</option>
+                                <option>Speaking Engagements & Workshops</option>
+                                <option>Video Production & Scriptwriting</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="timeline">Timeline</label>
+                            <select id="timeline" name="timeline">
+                                <option value="" disabled selected>Select timeline</option>
+                                <option>ASAP</option>
+                                <option>2–4 weeks</option>
+                                <option>1–3 months</option>
+                                <option>Flexible</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="budget">Budget Range</label>
+                            <select id="budget" name="budget">
+                                <option value="" disabled selected>Select budget</option>
+                                <option>$500–$1,500</option>
+                                <option>$1,500–$5,000</option>
+                                <option>$5,000–$10,000</option>
+                                <option>$10,000+</option>
+                            </select>
+                        </div>
+                        <div class="form-field">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location" placeholder="City, Country">
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="message">Project Details</label>
+                        <textarea id="message" name="message" rows="6" required placeholder="Tell me about your project, goals, and any references."></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="cta-button">Send Message</button>
+                        <p class="form-hint">Submits via your email app for a quick reply.</p>
+                    </div>
+                </form>
 
                 <div class="contact-item">
                     <h4>Email</h4>
-                    <a href="mailto:the1qweicue@gmail.com">the1qweicue@gmail.com</a><br>
-                    <a href="mailto:kd449322@ohio.edu">kd449322@ohio.edu</a><br>
                     <a href="mailto:kwekuk.diaw@gmail.com">kwekuk.diaw@gmail.com</a>
                 </div>
 
@@ -390,21 +460,7 @@
                 </div>
             </div>
 
-            <div class="contact-info">
-                <h3>Open To</h3>
-                <ul class="skill-list" style="background: white; padding: 2rem; border-radius: 15px;">
-                    <li>Photography & Visual Communication Projects</li>
-                    <li>Copywriting & Content Creation</li>
-                    <li>Marketing Strategy & Campaign Management</li>
-                    <li>Creative Direction & Art Direction</li>
-                    <li>Cultural Projects & Collaborations</li>
-                    <li>Spoken Word Performances</li>
-                    <li>Speaking Engagements & Workshops</li>
-                    <li>Sponsorships for AfrOtakus Project</li>
-                    <li>Journalism & Editorial Work</li>
-                    <li>Video Production & Scriptwriting</li>
-                </ul>
-            </div>
+        
         </div>
     </section>
 
@@ -412,9 +468,7 @@
     <footer>
         <div class="footer-content">
             <p class="footer-quote">"Everyone is searching, except the pilot in airplane mode."</p>
-            <p><strong>Welcome to The Li Chronicles.</strong></p>
-            <p class="footer-text">All we need is black and white. Let's make history!</p>
-            <p class="footer-text" style="margin-top: 2rem;">© 2025 Kweku Diaw. Visual Storyteller & Creative Strategist.</p>
+            <p class="footer-text" style="margin-top: 2rem;">© 2026 Kweku Diaw. Visual Storyteller & Creative Strategist.</p>
         </div>
     </footer>
 

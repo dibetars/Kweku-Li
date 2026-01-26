@@ -34,3 +34,41 @@ document.querySelectorAll('section').forEach(section => {
 
 document.querySelector('.hero').style.opacity = '1';
 document.querySelector('.hero').style.transform = 'translateY(0)';
+
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = contactForm.name.value.trim();
+        const email = contactForm.email.value.trim();
+        const phone = contactForm.phone.value.trim();
+        const company = contactForm.company.value.trim();
+        const service = contactForm.service.value;
+        const timeline = contactForm.timeline.value;
+        const budget = contactForm.budget.value;
+        const locationField = contactForm.location.value.trim();
+        const message = contactForm.message.value.trim();
+        if (!name || !email || !service || !message) {
+            contactForm.reportValidity();
+            return;
+        }
+        const subject = `New inquiry: ${service} - ${name}`;
+        const bodyLines = [
+            `Name: ${name}`,
+            `Email: ${email}`,
+            phone ? `Phone: ${phone}` : '',
+            company ? `Company: ${company}` : '',
+            `Service: ${service}`,
+            timeline ? `Timeline: ${timeline}` : '',
+            budget ? `Budget: ${budget}` : '',
+            locationField ? `Location: ${locationField}` : '',
+            '',
+            'Details:',
+            message,
+            '',
+            `Page: ${window.location.href}`
+        ].filter(Boolean).join('\n');
+        const mailto = `mailto:the1qweicue@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines)}`;
+        window.location.href = mailto;
+    });
+}
