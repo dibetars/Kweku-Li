@@ -12,3 +12,6 @@ coverage/
 *.log.*
 *.tmp
 *.cache/
+data/
+uploads/
+package-lock.json

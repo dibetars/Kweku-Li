@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kweku Li - Admin Dashboard</title>
+  <link rel="stylesheet" href="/admin/styles.css">
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <h2>Kweku Li</h2>
+        <span class="badge">Admin</span>
+      </div>
+      
+      <nav class="nav-menu">
+        <div class="nav-group">
+          <label>Content Sections</label>
+          <button class="nav-item active" data-section="hero">
+            <i class="fas fa-home"></i> Hero
+          </button>
+          <button class="nav-item" data-section="services">
+            <i class="fas fa-tools"></i> Services
+          </button>
+          <button class="nav-item" data-section="work">
+            <i class="fas fa-briefcase"></i> Work
+          </button>
+          <button class="nav-item" data-section="portfolio">
+            <i class="fas fa-images"></i> Portfolio
+          </button>
+          <button class="nav-item" data-section="about">
+            <i class="fas fa-user"></i> About
+          </button>
+          <button class="nav-item" data-section="testimonials">
+            <i class="fas fa-comment-alt"></i> Testimonials
+          </button>
+          <button class="nav-item" data-section="contact">
+            <i class="fas fa-envelope"></i> Contact & Footer
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <label>Appearance</label>
+          <button class="nav-item" data-section="theme">
+            <i class="fas fa-palette"></i> Theme Settings
+          </button>
+        </div>
+
+        <div class="nav-group">
+          <label>System</label>
+          <button class="nav-item" data-section="users">
+            <i class="fas fa-users-cog"></i> Users
+          </button>
+          <button class="nav-item" data-section="logs">
+            <i class="fas fa-history"></i> Audit Logs
+          </button>
+        </div>
+      </nav>
+
+      <div class="user-info">
+        <div class="user-details">
+          <span id="currentUser">User</span>
+          <span id="currentRole" class="role-tag">Editor</span>
+        </div>
+        <button id="logoutBtn" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-header">
+        <h1 id="pageTitle">Hero Section</h1>
+        <div class="actions">
+          <span id="saveStatus" class="status-msg"></span>
+          <a href="/" target="_blank" class="btn-secondary" style="text-decoration:none">
+            <i class="fas fa-external-link-alt"></i> View Site
+          </a>
+          <button id="saveBtn" class="btn-primary">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+        </div>
+      </header>
+
+      <div id="editorArea" class="editor-area">
+        <!-- Dynamic Content Injected Here -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Media Modal -->
+  <div id="mediaModal" class="modal hidden">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Select Image</h3>
+        <button class="close-modal">&times;</button>
+      </div>
+      <div class="media-body">
+        <div class="upload-zone">
+          <input type="file" id="modalUpload" accept="image/*" hidden>
+          <label for="modalUpload" class="btn-secondary">
+            <i class="fas fa-cloud-upload-alt"></i> Upload New Image
+          </label>
+          <span id="uploadStatus"></span>
+        </div>
+        <div class="media-grid" id="mediaGrid">
+          <!-- Images loaded here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/admin/dashboard.js"></script>
+</body>
+</html>

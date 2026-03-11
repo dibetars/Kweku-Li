@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kweku Diaw - Visual Storyteller & Creative Strategist</title>
     <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/layouts.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="assets/js/theme.js"></script>
 </head>
 <body>
     <!-- Navigation -->
@@ -22,11 +25,11 @@
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content fade-in-up">
-            <p class="hero-subtitle">Visual Storyteller & Creative Strategist</p>
+            <p class="hero-subtitle" data-content-key="hero.subtitle">Visual Storyteller & Creative Strategist</p>
             <h1 class="hero-title">
                 I help brands tell <span class="italic-text">stories</span> that make customers fall in <span class="italic-text">love</span>
             </h1>
-            <p class="hero-description">
+            <p class="hero-description" data-content-key="hero.description">
                 A multifaceted creative professional bridging photography, copywriting, marketing strategy, and visual communication. From capturing Black cosplay culture to launching independent artists to mainstream success, I create work that matters.
             </p>
             <a href="#work" class="cta-button">Explore My Work</a>
@@ -36,13 +39,13 @@
     <!-- Services Section -->
     <section class="services" id="services">
         <div class="section-header">
-            <h2 class="section-title">What I Do <span class="italic-text">Best</span></h2>
-            <p class="section-description">
+            <h2 class="section-title" data-content-key="services.title">What I Do <span class="italic-text">Best</span></h2>
+            <p class="section-description" data-content-key="services.description">
                 Combining creativity with strategic thinking to deliver results that exceed expectations
             </p>
         </div>
 
-        <div class="services-grid">
+        <div class="services-grid" id="services-grid">
             <div class="service-card">
                 <div class="service-icon">📸</div>
                 <h3>Photography & Visual Communication</h3>
@@ -84,13 +87,13 @@
     <!-- Case Studies Section -->
     <section class="case-studies" id="work">
         <div class="section-header">
-            <h2 class="section-title">Featured <span class="italic-text">Case Studies</span></h2>
-            <p class="section-description">
+            <h2 class="section-title" data-content-key="work.title">Featured <span class="italic-text">Case Studies</span></h2>
+            <p class="section-description" data-content-key="work.description">
                 Results-driven campaigns that turn vision into measurable success
             </p>
         </div>
 
-        <div class="case-grid">
+        <div class="case-grid" id="case-grid">
             <!-- Case Study 1: Greetings From Abroad -->
             <div class="case-card">
                 <div class="case-image">🎵</div>
@@ -183,7 +186,7 @@
             <h2 class="section-title">Selected <span class="italic-text">Work</span></h2>
         </div>
 
-        <div class="portfolio-grid">
+        <div class="portfolio-grid" id="portfolio-grid">
             <div class="portfolio-item">
                 <div class="portfolio-image">🌐</div>
                 <div class="portfolio-content">
@@ -325,7 +328,7 @@
             </p>
         </div>
 
-        <div class="testimonial-grid">
+        <div class="testimonial-grid" id="testimonial-grid">
             <div class="testimonial-card">
                 <p class="testimonial-text">
                     "We saw a 200% increase in Sales Qualified Leads from our collaboration. Kweku's strategic approach combined with creative execution delivered results beyond our expectations."
@@ -447,7 +450,7 @@
 
                 <div class="contact-item">
                     <h4>Location</h4>
-                    <p>Accra, Greater Accra, Ghana / Athens, Ohio, USA</p>
+                    <p data-content-key="contact.location">Accra, Greater Accra, Ghana / Athens, Ohio, USA</p>
                 </div>
 
                 <div class="social-links">
@@ -467,11 +470,12 @@
     <!-- Footer -->
     <footer>
         <div class="footer-content">
-            <p class="footer-quote">"Everyone is searching, except the pilot in airplane mode."</p>
+            <p class="footer-quote" data-content-key="footer.quote">"Everyone is searching, except the pilot in airplane mode."</p>
             <p class="footer-text" style="margin-top: 2rem;">© 2026 Kweku Diaw. Visual Storyteller & Creative Strategist.</p>
         </div>
     </footer>
 
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/content.js"></script>
 </body>
 </html>

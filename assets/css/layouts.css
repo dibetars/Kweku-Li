@@ -1,0 +1,52 @@
+/* Layout Utilities */
+
+/* Hero: Center Alignment */
+body.layout-hero-center .hero-content {
+    text-align: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+body.layout-hero-center .hero h1 {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body.layout-hero-center .cta-container {
+    justify-content: center;
+}
+
+/* Cards: List View */
+body.layout-cards-list .services-grid,
+body.layout-cards-list .portfolio-grid,
+body.layout-cards-list .case-grid {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body.layout-cards-list .service-card,
+body.layout-cards-list .portfolio-item,
+body.layout-cards-list .case-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    gap: 2rem;
+}
+
+body.layout-cards-list .service-icon {
+    margin-bottom: 0;
+    font-size: 3rem;
+}
+
+/* Mobile adjustments for list view */
+@media (max-width: 768px) {
+    body.layout-cards-list .service-card,
+    body.layout-cards-list .portfolio-item,
+    body.layout-cards-list .case-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
