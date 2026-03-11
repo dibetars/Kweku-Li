@@ -1,5 +1,15 @@
 async function getCsrf() {
   const r = await fetch('/api/auth/csrf')
+  if (!r.ok) {
+    console.error('CSRF fetch failed:', r.status, r.statusText)
+    try {
+      const text = await r.text()
+      console.error('Response body:', text)
+    } catch (e) {
+      console.error('Could not read response text')
+    }
+    throw new Error(`Failed to fetch CSRF token: ${r.status}`)
+  }
   const j = await r.json()
   return j.token
 }

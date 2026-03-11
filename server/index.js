@@ -10,6 +10,10 @@ import path from 'path'
 import fs from 'fs'
 
 const app = express()
+
+// Trust proxy is required for secure cookies behind a reverse proxy (Coolify/Traefik)
+app.set('trust proxy', 1)
+
 const SQLiteStore = connectSqlite3(session)
 const dataDir = path.join(process.cwd(), 'data')
 const uploadDir = path.join(process.cwd(), 'uploads')
