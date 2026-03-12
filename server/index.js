@@ -2,15 +2,48 @@ import express from 'express'
 import session from 'express-session'
 import cookieSession from 'cookie-session'
 import connectSqlite3 from 'connect-sqlite3'
-import sqlite3 from 'sqlite3'
 import bcrypt from 'bcrypt'
 import multer from 'multer'
 import { v4 as uuidv4 } from 'uuid'
 import csurf from 'csurf'
 import path from 'path'
 import fs from 'fs'
+import helmet from 'helmet'
+import rateLimit from 'express-rate-limit'
+import { getDb, initDb } from './db.js'
 
 const app = express()
+
+// Security Headers (Helmet)
+// Note: We need to configure CSP to allow external scripts (FontAwesome) and inline scripts (theme.js)
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+      imgSrc: ["'self'", "data:", "blob:"],
+      fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+      upgradeInsecureRequests: [], // Disable for localhost dev
+    },
+  },
+}))
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+})
+app.use('/api/', limiter)
+
+const authLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 10, // Limit each IP to 10 login attempts per hour
+  message: { error: 'Too many login attempts, please try again later.' }
+})
+app.use('/api/auth/login', authLimiter)
 
 // Trust proxy is required for secure cookies behind a reverse proxy (Coolify/Traefik/Vercel)
 app.set('trust proxy', 1)
@@ -24,10 +57,8 @@ const uploadDir = isVercel ? '/tmp/uploads' : path.join(process.cwd(), 'uploads'
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir)
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir)
 
-// On Vercel, the database will be reset on each cold start.
-// This is a known limitation of using SQLite in a serverless environment.
-// For production persistence, use Vercel Postgres or Turso.
-const db = new sqlite3.Database(path.join(dataDir, 'app.sqlite'))
+// Initialize Database
+const db = getDb()
 
 // Initial Content Seed
 const SEED_CONTENT = {
@@ -143,39 +174,8 @@ const SEED_CONTENT = {
   })
 }
 
-db.serialize(() => {
-  db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, role TEXT NOT NULL, created_at TEXT NOT NULL)')
-  db.run('CREATE TABLE IF NOT EXISTS content (key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_by INTEGER, updated_at TEXT NOT NULL)')
-  db.run('CREATE TABLE IF NOT EXISTS audit_logs (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, action TEXT NOT NULL, key TEXT, before TEXT, after TEXT, created_at TEXT NOT NULL, ip TEXT)')
-
-  // Ensure admin user exists (re-seed on every startup for Vercel/ephemeral DBs)
-  db.get('SELECT COUNT(*) as c FROM users WHERE username = ?', ['admin'], async (err, row) => {
-    if (!err && row.c === 0) {
-      console.log('Seeding admin user...')
-      // Default password or from env
-      const password = process.env.ADMIN_PASSWORD || 'password123'
-      const hash = await bcrypt.hash(password, 12)
-      const now = new Date().toISOString()
-      db.run('INSERT INTO users (username, password_hash, role, created_at) VALUES (?, ?, ?, ?)', ['admin', hash, 'admin', now], (e) => {
-        if (e) console.error('Failed to seed admin user:', e)
-        else console.log('Admin user seeded.')
-      })
-    }
-  })
-
-  // Seed content if empty
-  db.get('SELECT COUNT(*) as c FROM content', (err, row) => {
-    if (!err && row.c === 0) {
-      console.log('Seeding initial content...')
-      const now = new Date().toISOString()
-      const stmt = db.prepare('INSERT INTO content (key, value, updated_at) VALUES (?, ?, ?)')
-      Object.entries(SEED_CONTENT).forEach(([key, value]) => {
-        stmt.run(key, value, now)
-      })
-      stmt.finalize()
-    }
-  })
-})
+// Initialize Database Schema and Seed Data
+initDb(SEED_CONTENT, bcrypt)
 
 app.use(express.json())
 
