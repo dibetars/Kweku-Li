@@ -15,11 +15,17 @@ const app = express()
 app.set('trust proxy', 1)
 
 const SQLiteStore = connectSqlite3(session)
-const dataDir = path.join(process.cwd(), 'data')
-const uploadDir = path.join(process.cwd(), 'uploads')
+const isVercel = process.env.VERCEL === '1'
+
+const dataDir = isVercel ? '/tmp' : path.join(process.cwd(), 'data')
+const uploadDir = isVercel ? '/tmp/uploads' : path.join(process.cwd(), 'uploads')
+
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir)
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir)
 
+// On Vercel, the database will be reset on each cold start.
+// This is a known limitation of using SQLite in a serverless environment.
+// For production persistence, use Vercel Postgres or Turso.
 const db = new sqlite3.Database(path.join(dataDir, 'app.sqlite'))
 
 // Initial Content Seed
@@ -345,5 +351,11 @@ app.get('/admin/dashboard.html', requireAuth, (req, res) => {
 app.use('/admin', express.static(path.join(process.cwd(), 'admin')))
 app.use(express.static(process.cwd()))
 
-const port = process.env.PORT || 8000
-app.listen(port, () => {})
+if (process.env.VERCEL !== '1') {
+  const port = process.env.PORT || 8000
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`)
+  })
+}
+
+export default app
