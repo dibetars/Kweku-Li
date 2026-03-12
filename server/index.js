@@ -1,5 +1,6 @@
 import express from 'express'
 import session from 'express-session'
+import cookieSession from 'cookie-session'
 import connectSqlite3 from 'connect-sqlite3'
 import sqlite3 from 'sqlite3'
 import bcrypt from 'bcrypt'
@@ -11,7 +12,7 @@ import fs from 'fs'
 
 const app = express()
 
-// Trust proxy is required for secure cookies behind a reverse proxy (Coolify/Traefik)
+// Trust proxy is required for secure cookies behind a reverse proxy (Coolify/Traefik/Vercel)
 app.set('trust proxy', 1)
 
 const SQLiteStore = connectSqlite3(session)
@@ -147,6 +148,21 @@ db.serialize(() => {
   db.run('CREATE TABLE IF NOT EXISTS content (key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_by INTEGER, updated_at TEXT NOT NULL)')
   db.run('CREATE TABLE IF NOT EXISTS audit_logs (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, action TEXT NOT NULL, key TEXT, before TEXT, after TEXT, created_at TEXT NOT NULL, ip TEXT)')
 
+  // Ensure admin user exists (re-seed on every startup for Vercel/ephemeral DBs)
+  db.get('SELECT COUNT(*) as c FROM users WHERE username = ?', ['admin'], async (err, row) => {
+    if (!err && row.c === 0) {
+      console.log('Seeding admin user...')
+      // Default password or from env
+      const password = process.env.ADMIN_PASSWORD || 'password123'
+      const hash = await bcrypt.hash(password, 12)
+      const now = new Date().toISOString()
+      db.run('INSERT INTO users (username, password_hash, role, created_at) VALUES (?, ?, ?, ?)', ['admin', hash, 'admin', now], (e) => {
+        if (e) console.error('Failed to seed admin user:', e)
+        else console.log('Admin user seeded.')
+      })
+    }
+  })
+
   // Seed content if empty
   db.get('SELECT COUNT(*) as c FROM content', (err, row) => {
     if (!err && row.c === 0) {
@@ -162,19 +178,35 @@ db.serialize(() => {
 })
 
 app.use(express.json())
-app.use(session({
-  store: new SQLiteStore({ dir: dataDir, db: 'sessions.sqlite' }),
-  secret: process.env.SESSION_SECRET || 'dev-secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 1000 * 60 * 60 * 4
-  }
-}))
 
+if (isVercel) {
+  // Use cookie-session for Vercel (stateless, stores session in cookie)
+  app.use(cookieSession({
+    name: 'session',
+    keys: [process.env.SESSION_SECRET || 'dev-secret-key-1', process.env.SESSION_SECRET_2 || 'dev-secret-key-2'],
+    maxAge: 4 * 60 * 60 * 1000, // 4 hours
+    secure: true, // Vercel is always HTTPS
+    sameSite: 'lax',
+    httpOnly: true
+  }))
+} else {
+  // Use SQLite store for local dev
+  app.use(session({
+    store: new SQLiteStore({ dir: dataDir, db: 'sessions.sqlite' }),
+    secret: process.env.SESSION_SECRET || 'dev-secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 1000 * 60 * 60 * 4
+    }
+  }))
+}
+
+// CSRF Protection (works with both session types)
+// For cookie-session, csurf uses req.session by default
 const csrfProtection = csurf()
 const sseClients = new Set()
 
@@ -226,15 +258,25 @@ app.post('/api/auth/login', csrfProtection, (req, res) => {
     if (!row) return res.status(401).json({ error: 'invalid' })
     const ok = await bcrypt.compare(password, row.password_hash)
     if (!ok) return res.status(401).json({ error: 'invalid' })
+  if (isVercel) {
+    // cookie-session exposes req.session as the object directly
     req.session.user = { id: row.id, username: row.username, role: row.role }
+  } else {
+    req.session.user = { id: row.id, username: row.username, role: row.role }
+  }
     res.json({ ok: true, user: req.session.user })
   })
 })
 
 app.post('/api/auth/logout', requireAuth, (req, res) => {
-  req.session.destroy(() => {
+  if (isVercel) {
+    req.session = null // cookie-session way to destroy
     res.json({ ok: true })
-  })
+  } else {
+    req.session.destroy(() => {
+      res.json({ ok: true })
+    })
+  }
 })
 
 app.get('/api/auth/me', (req, res) => {

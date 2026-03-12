@@ -19,10 +19,21 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   const form = e.target
   const payload = { username: form.username.value, password: form.password.value }
   const r = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json', 'CSRF-Token': token }, body: JSON.stringify(payload) })
-  const j = await r.json()
+  
+  // Handle non-JSON responses (e.g. 403 HTML from server)
   if (!r.ok) {
-    document.getElementById('loginError').textContent = j.error || 'Login failed'
+    try {
+      const j = await r.json()
+      document.getElementById('loginError').textContent = j.error || 'Login failed'
+    } catch (e) {
+      console.error('Login failed with non-JSON response:', r.status)
+      const text = await r.text()
+      console.error(text)
+      document.getElementById('loginError').textContent = `Server Error (${r.status}). Check console.`
+    }
     return
   }
+  
+  const j = await r.json()
   location.href = '/admin/dashboard.html'
 })
