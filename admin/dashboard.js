@@ -72,14 +72,23 @@ const SECTIONS = {
       { key: 'author', label: 'Author', type: 'text', width: '100%' }
     ]
   },
+  layout: {
+    title: 'Layout & Navigation',
+    type: 'layout-editor',
+    fields: [
+      { key: 'header.logo', label: 'Logo Text', type: 'text' },
+      { key: 'header.cta', label: 'Header CTA Text', type: 'text' },
+      { key: 'footer.quote', label: 'Footer Quote', type: 'text' },
+      { key: 'footer.copyright', label: 'Copyright Text', type: 'text' }
+    ]
+  },
   contact: {
-    title: 'Contact & Footer',
+    title: 'Contact',
     type: 'form',
     fields: [
       { key: 'contact.email', label: 'Email', type: 'text' },
       { key: 'contact.phone', label: 'Phone', type: 'text' },
       { key: 'contact.location', label: 'Location', type: 'text' },
-      { key: 'footer.quote', label: 'Footer Quote', type: 'text' },
       { key: 'social.linkedin', label: 'LinkedIn URL', type: 'text' },
       { key: 'social.instagram', label: 'Instagram URL', type: 'text' },
       { key: 'social.twitter', label: 'X/Twitter URL', type: 'text' },
@@ -229,6 +238,9 @@ function renderSection(sectionKey) {
   } else if (config.type === 'theme-editor') {
     saveBtn.style.display = 'flex';
     renderThemeEditor(container, config);
+  } else if (config.type === 'layout-editor') {
+    saveBtn.style.display = 'flex';
+    renderLayoutEditor(container, config);
   }
 }
 
@@ -602,6 +614,21 @@ async function saveCurrentSection() {
         key: config.key, 
         value: { mode, layout, variables } 
       });
+    } else if (config.type === 'layout-editor') {
+      // Save Form Fields
+      config.fields.forEach(field => {
+        const input = document.getElementById(`input_${field.key}`);
+        if (input) {
+          updates.push({ key: field.key, value: input.value });
+        }
+      });
+      
+      // Save Section Order
+      const order = [];
+      document.querySelectorAll('#sectionOrderList .sortable-item').forEach(item => {
+        order.push(item.dataset.section);
+      });
+      updates.push({ key: 'layout.order', value: JSON.stringify(order) });
     }
 
     // Process all updates
@@ -766,6 +793,128 @@ async function uploadImage(e) {
 async function loadMediaImages() {
   // To implement this, we'd need a new API endpoint GET /api/images
   // For now, let's skip the gallery grid and just handle uploads
+}
+
+// --- Layout Editor & DnD ---
+
+function renderLayoutEditor(container, config) {
+  // 1. Render Header/Footer Fields
+  const formContainer = document.createElement('div');
+  formContainer.innerHTML = '<h3 style="margin-bottom: 1rem;">Header & Footer Settings</h3>';
+  renderForm(formContainer, config.fields);
+  container.appendChild(formContainer);
+
+  // 2. Render Drag & Drop Section Reordering
+  const dndContainer = document.createElement('div');
+  dndContainer.style.marginTop = '3rem';
+  dndContainer.style.borderTop = '1px solid var(--border-color)';
+  dndContainer.style.paddingTop = '2rem';
+  
+  dndContainer.innerHTML = `
+    <h3 style="margin-bottom: 0.5rem;">Landing Page Layout</h3>
+    <p style="color: var(--text-muted); margin-bottom: 1rem;">Drag and drop sections to reorder them on the main page.</p>
+  `;
+  
+  const list = document.createElement('ul');
+  list.id = 'sectionOrderList';
+  list.style.listStyle = 'none';
+  list.style.padding = '0';
+  list.style.maxWidth = '600px';
+  
+  // Get current order or default
+  let order = ['hero', 'services', 'work', 'portfolio', 'about', 'testimonials', 'contact'];
+  try {
+    if (contentData['layout.order']) {
+      const parsed = JSON.parse(contentData['layout.order']);
+      if (Array.isArray(parsed) && parsed.length > 0) order = parsed;
+    }
+  } catch (e) { console.error('Error parsing layout order', e); }
+
+  order.forEach(section => {
+    const li = document.createElement('li');
+    li.className = 'sortable-item';
+    li.draggable = true;
+    li.dataset.section = section;
+    li.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-weight: 500;">${section.charAt(0).toUpperCase() + section.slice(1)}</span>
+        <i class="fas fa-grip-lines" style="color: var(--text-muted);"></i>
+      </div>
+    `;
+    
+    // Style
+    li.style.padding = '1rem';
+    li.style.marginBottom = '0.5rem';
+    li.style.background = 'var(--bg-card)';
+    li.style.border = '1px solid var(--border-color)';
+    li.style.borderRadius = '6px';
+    li.style.cursor = 'grab';
+    li.style.transition = 'all 0.2s ease';
+    
+    // DnD Events
+    li.addEventListener('dragstart', handleDragStart);
+    li.addEventListener('dragover', handleDragOver);
+    li.addEventListener('drop', handleDrop);
+    li.addEventListener('dragenter', handleDragEnter);
+    li.addEventListener('dragleave', handleDragLeave);
+    li.addEventListener('dragend', handleDragEnd);
+    
+    list.appendChild(li);
+  });
+  
+  dndContainer.appendChild(list);
+  container.appendChild(dndContainer);
+}
+
+// DnD Handlers
+let dragSrcEl = null;
+
+function handleDragStart(e) {
+  dragSrcEl = this;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', this.innerHTML);
+  this.style.opacity = '0.4';
+  this.style.transform = 'scale(0.98)';
+}
+
+function handleDragOver(e) {
+  if (e.preventDefault) e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  return false;
+}
+
+function handleDragEnter(e) {
+  this.style.border = '2px dashed var(--primary-color)';
+}
+
+function handleDragLeave(e) {
+  this.style.border = '1px solid var(--border-color)';
+}
+
+function handleDragEnd(e) {
+  this.style.opacity = '1';
+  this.style.transform = 'scale(1)';
+  document.querySelectorAll('.sortable-item').forEach(item => {
+    item.style.border = '1px solid var(--border-color)';
+  });
+}
+
+function handleDrop(e) {
+  if (e.stopPropagation) e.stopPropagation();
+  
+  if (dragSrcEl !== this) {
+    const list = this.parentNode;
+    const allItems = [...list.children];
+    const srcIndex = allItems.indexOf(dragSrcEl);
+    const targetIndex = allItems.indexOf(this);
+    
+    if (srcIndex < targetIndex) {
+      list.insertBefore(dragSrcEl, this.nextSibling);
+    } else {
+      list.insertBefore(dragSrcEl, this);
+    }
+  }
+  return false;
 }
 
 // Start

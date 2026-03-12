@@ -24,6 +24,7 @@ function applyContent(data) {
       else el.innerHTML = v; // Use innerHTML to allow simple HTML tags like spans
     } else if (v && typeof v === 'object') {
       if (v.text !== undefined) el.innerHTML = v.text;
+      if (v.href && el.tagName === 'A') el.href = v.href;
       if (v.image) {
         if (el.tagName === 'IMG') el.src = v.image;
         else el.style.backgroundImage = `url(${v.image})`;

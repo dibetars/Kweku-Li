@@ -63,6 +63,10 @@ const db = getDb()
 // Initial Content Seed
 const SEED_CONTENT = {
   'hero.subtitle': 'Visual Storyteller & Creative Strategist',
+  'layout.order': JSON.stringify(['hero', 'services', 'work', 'portfolio', 'about', 'testimonials', 'contact']),
+  'header.logo': 'Kweku Diaw',
+  'header.cta': JSON.stringify({ text: "Let's Talk", href: "#contact" }),
+  'footer.copyright': '© 2026 Kweku Diaw. Visual Storyteller & Creative Strategist.',
   'hero.title': JSON.stringify({ text: 'I help brands tell <span class="italic-text">stories</span> that make customers fall in <span class="italic-text">love</span>' }),
   'hero.description': 'A multifaceted creative professional bridging photography, copywriting, marketing strategy, and visual communication. From capturing Black cosplay culture to launching independent artists to mainstream success, I create work that matters.',
   
