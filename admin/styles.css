@@ -542,3 +542,117 @@ select:focus {
 .back-link:hover {
   color: var(--text-main);
 }
+
+/* Inbox */
+.count-badge {
+  margin-left: auto;
+  background: var(--primary-color);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+}
+
+.count-badge.hidden {
+  display: none;
+}
+
+.inbox-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.inbox-filters {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.inbox-filter {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.inbox-filter.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+}
+
+.submission.status-new {
+  border-left: 3px solid var(--primary-color);
+}
+
+.submission.status-archived {
+  opacity: 0.6;
+}
+
+.submission-email {
+  color: var(--text-muted);
+  margin-left: 0.5rem;
+  text-decoration: none;
+}
+
+.submission-email:hover {
+  color: var(--text-main);
+}
+
+.status-pill {
+  margin-left: 0.5rem;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: var(--bg-input);
+  color: var(--text-muted);
+}
+
+.email-ok,
+.email-fail {
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.email-ok { color: var(--success); }
+.email-fail { color: var(--danger); }
+
+.submission-service {
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+.submission-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.2rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.submission-message {
+  white-space: pre-wrap;
+  margin: 0 0 1rem;
+  line-height: 1.6;
+}
+
+.submission-actions {
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.submission-actions select {
+  width: auto;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+}

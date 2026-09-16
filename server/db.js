@@ -18,6 +18,24 @@ export const initDb = (seedContent, bcrypt) => {
     db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE NOT NULL, password_hash TEXT NOT NULL, role TEXT NOT NULL, created_at TEXT NOT NULL)')
     db.run('CREATE TABLE IF NOT EXISTS content (key TEXT PRIMARY KEY, value TEXT NOT NULL, updated_by INTEGER, updated_at TEXT NOT NULL)')
     db.run('CREATE TABLE IF NOT EXISTS audit_logs (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, action TEXT NOT NULL, key TEXT, before TEXT, after TEXT, created_at TEXT NOT NULL, ip TEXT)')
+    db.run(`CREATE TABLE IF NOT EXISTS submissions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      phone TEXT,
+      company TEXT,
+      service TEXT,
+      timeline TEXT,
+      budget TEXT,
+      location TEXT,
+      message TEXT NOT NULL,
+      ip TEXT,
+      user_agent TEXT,
+      status TEXT NOT NULL DEFAULT 'new',
+      email_status TEXT,
+      email_sent_at TEXT,
+      created_at TEXT NOT NULL
+    )`)
 
     // Ensure admin user exists (re-seed on every startup for Vercel/ephemeral DBs)
     db.get('SELECT COUNT(*) as c FROM users WHERE username = ?', ['admin'], async (err, row) => {

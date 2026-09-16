@@ -103,7 +103,8 @@ const SECTIONS = {
     key: 'theme.config'
   },
   users: { title: 'User Management', type: 'system-users' },
-  logs: { title: 'Audit Logs', type: 'system-logs' }
+  logs: { title: 'Audit Logs', type: 'system-logs' },
+  inbox: { title: 'Inbox', type: 'system-inbox' }
 };
 
 const THEME_PRESETS = {
@@ -165,6 +166,7 @@ async function init() {
     await loadContent();
     setupNavigation();
     renderSection('hero');
+    refreshInboxBadge();
   } catch (e) {
     console.error(e);
   }
@@ -235,6 +237,9 @@ function renderSection(sectionKey) {
   } else if (config.type === 'system-logs') {
     saveBtn.style.display = 'none';
     renderAuditLogs(container);
+  } else if (config.type === 'system-inbox') {
+    saveBtn.style.display = 'none';
+    renderInbox(container);
   } else if (config.type === 'theme-editor') {
     saveBtn.style.display = 'flex';
     renderThemeEditor(container, config);
@@ -739,6 +744,110 @@ async function renderAuditLogs(container) {
       <span style="float: right; color: var(--text-muted)">${new Date(l.created_at).toLocaleString()}</span>
     </div>
   `).join('');
+}
+
+// --- Inbox (contact form submissions) ---
+
+const INBOX_STATUSES = ['new', 'read', 'replied', 'archived'];
+let inboxFilter = 'active';
+
+async function refreshInboxBadge() {
+  try {
+    const r = await fetch('/api/admin/submissions/unread-count');
+    const j = await r.json();
+    const badge = document.getElementById('inboxBadge');
+    if (!badge) return;
+    badge.textContent = j.count;
+    badge.classList.toggle('hidden', !j.count);
+  } catch {}
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+async function renderInbox(container) {
+  container.innerHTML = `
+    <div class="inbox-toolbar">
+      <div class="inbox-filters">
+        ${[['active', 'Active'], ['new', 'New'], ['replied', 'Replied'], ['archived', 'Archived'], ['all', 'All']].map(([k, label]) =>
+          `<button class="inbox-filter${inboxFilter === k ? ' active' : ''}" data-filter="${k}">${label}</button>`).join('')}
+      </div>
+      <span id="inboxSummary" class="status-msg"></span>
+    </div>
+    <div id="inboxList" class="list-container">Loading...</div>`;
+
+  container.querySelectorAll('.inbox-filter').forEach(btn => {
+    btn.onclick = () => { inboxFilter = btn.dataset.filter; renderInbox(container); };
+  });
+
+  const r = await fetch('/api/admin/submissions');
+  const all = await r.json();
+  const rows = all.filter(s => {
+    if (inboxFilter === 'all') return true;
+    if (inboxFilter === 'active') return s.status === 'new' || s.status === 'read';
+    return s.status === inboxFilter;
+  });
+
+  document.getElementById('inboxSummary').textContent = `${rows.length} of ${all.length} messages`;
+  const list = document.getElementById('inboxList');
+  if (!rows.length) {
+    list.innerHTML = '<p style="color: var(--text-muted)">No messages here.</p>';
+    return;
+  }
+
+  list.innerHTML = rows.map(s => {
+    const meta = [['Phone', s.phone], ['Company', s.company], ['Timeline', s.timeline], ['Budget', s.budget], ['Location', s.location]]
+      .filter(([, v]) => v)
+      .map(([k, v]) => `<span><strong>${k}:</strong> ${escapeHtml(v)}</span>`).join('');
+    const emailNote = s.email_status
+      ? (s.email_status === 'sent' ? '<span class="email-ok"><i class="fas fa-check"></i> Emailed</span>' : `<span class="email-fail" title="${escapeHtml(s.email_status)}"><i class="fas fa-exclamation-triangle"></i> Email not sent</span>`)
+      : '';
+    return `
+    <div class="list-item submission status-${s.status}" data-id="${s.id}">
+      <div class="list-item-header">
+        <div>
+          <strong>${escapeHtml(s.name)}</strong>
+          <a href="mailto:${escapeHtml(s.email)}?subject=${encodeURIComponent('Re: ' + (s.service || 'your enquiry'))}" class="submission-email">${escapeHtml(s.email)}</a>
+          <span class="status-pill">${s.status}</span>
+          ${emailNote}
+        </div>
+        <span style="color: var(--text-muted); font-size: 0.85rem">${new Date(s.created_at).toLocaleString()}</span>
+      </div>
+      <div class="submission-service">${escapeHtml(s.service || '')}</div>
+      <div class="submission-meta">${meta}</div>
+      <p class="submission-message">${escapeHtml(s.message)}</p>
+      <div class="item-actions submission-actions">
+        <select class="submission-status">
+          ${INBOX_STATUSES.map(st => `<option value="${st}"${st === s.status ? ' selected' : ''}>${st}</option>`).join('')}
+        </select>
+        ${currentUser.role === 'admin' ? '<button class="btn-icon btn-danger submission-delete" title="Delete"><i class="fas fa-trash"></i></button>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.submission-status').forEach(sel => {
+    sel.onchange = async () => {
+      const id = sel.closest('.submission').dataset.id;
+      const token = await getCsrf();
+      const res = await fetch(`/api/admin/submissions/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'CSRF-Token': token },
+        body: JSON.stringify({ status: sel.value })
+      });
+      if (res.ok) { refreshInboxBadge(); renderInbox(container); }
+    };
+  });
+
+  list.querySelectorAll('.submission-delete').forEach(btn => {
+    btn.onclick = async () => {
+      if (!confirm('Delete this message permanently?')) return;
+      const id = btn.closest('.submission').dataset.id;
+      const token = await getCsrf();
+      const res = await fetch(`/api/admin/submissions/${id}`, { method: 'DELETE', headers: { 'CSRF-Token': token } });
+      if (res.ok) { refreshInboxBadge(); renderInbox(container); }
+    };
+  });
 }
 
 // --- Utilities ---

@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express'
 import session from 'express-session'
 import cookieSession from 'cookie-session'
@@ -11,6 +12,7 @@ import fs from 'fs'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 import { getDb, initDb } from './db.js'
+import { registerContactRoutes } from './contact.js'
 
 const app = express()
 
@@ -21,9 +23,9 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com"],
       imgSrc: ["'self'", "data:", "blob:"],
-      fontSrc: ["'self'", "https://cdnjs.cloudflare.com"],
+      fontSrc: ["'self'", "https://cdnjs.cloudflare.com", "https://fonts.gstatic.com"],
       upgradeInsecureRequests: [], // Disable for localhost dev
     },
   },
@@ -375,6 +377,8 @@ app.post('/api/upload/image', requireAuth, requireRole('admin', 'editor'), csrfP
   fs.renameSync(req.file.path, target)
   res.json({ url: `/uploads/${filename}` })
 })
+
+registerContactRoutes(app, db, { requireAuth, requireRole, csrfProtection })
 
 app.get('/events/content', (req, res) => {
   res.set({
