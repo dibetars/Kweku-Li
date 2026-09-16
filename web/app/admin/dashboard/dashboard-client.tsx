@@ -16,6 +16,7 @@ import {
   unreadSubmissionCountAction,
 } from '../actions';
 import { InboxPanel } from './inbox-panel';
+import { KeyEditor } from './field-editors';
 
 type Section =
   | 'hero'
@@ -69,55 +70,6 @@ const SECTIONS: { id: Section; label: string; keys?: string[] }[] = [
   { id: 'logs', label: 'Audit Logs' },
   { id: 'media', label: 'Media Library' },
 ];
-
-const LABELS: Record<string, string> = {
-  'hero.subtitle': 'Subtitle',
-  'hero.title': 'Title (JSON: { "text": "..." }, supports <span class="italic-text">)',
-  'hero.stats': 'Hero stats (JSON array of { number, label }, shown with a + prefix)',
-  'hero.image': 'Hero portrait URL (transparent PNG works best; upload via Media Library)',
-  'services.description': 'Services intro line',
-  'services.list': 'Services (JSON array of { icon, title, description })',
-  'work.list': 'Latest works (JSON array of { icon, tag, title, description, stats, image, client, year })',
-  'portfolio.list': 'Portfolio items (JSON array of { icon, title, description, image, category, subtitle })',
-  'experience.list': 'Experiences (JSON array of { title, date, description, tags[], images[] }; the last row is expanded)',
-  'promo.banner': 'Promo banner (JSON: { kicker, title, description, cta, image })',
-  'insights.list': 'Insight cards (JSON array of { category, meta, title, description, image })',
-  'about.intro': 'Intro',
-  'about.professional': 'Professional',
-  'about.artist': 'Artist',
-  'about.philosophy': 'Philosophy',
-  'about.mission': 'Mission',
-  'testimonials.list': 'Testimonials (JSON array of { text, author })',
-  'contact.email': 'Email',
-  'contact.phone': 'Phone',
-  'contact.location': 'Location',
-  'social.linkedin': 'LinkedIn URL',
-  'social.instagram': 'Instagram URL',
-  'social.twitter': 'X/Twitter URL',
-  'social.youtube': 'YouTube URL',
-  'social.tiktok': 'TikTok URL',
-  'social.soundcloud': 'SoundCloud URL',
-  'header.logo': 'Logo text (short, shown in a square badge)',
-  'header.cta': 'Header CTA (JSON: { text, href })',
-  'footer.quote': 'Footer quote',
-  'footer.copyright': 'Footer copyright',
-};
-
-const MULTILINE_KEYS = new Set([
-  'hero.stats',
-  'services.list',
-  'work.list',
-  'portfolio.list',
-  'experience.list',
-  'promo.banner',
-  'insights.list',
-  'testimonials.list',
-  'about.professional',
-  'about.artist',
-  'about.philosophy',
-  'about.mission',
-  'header.cta',
-]);
 
 export function Dashboard({ user, initialContent }: { user: SessionUser; initialContent: ContentMap }) {
   const [active, setActive] = useState<Section>('hero');
@@ -202,25 +154,14 @@ export function Dashboard({ user, initialContent }: { user: SessionUser; initial
         </div>
 
         {activeSection.keys && (
-          <div className="max-w-3xl space-y-6">
+          <div className="max-w-3xl space-y-4">
             {activeSection.keys.map((key) => (
-              <div key={key}>
-                <label className="mb-1 block text-sm font-medium">{LABELS[key] ?? key}</label>
-                {MULTILINE_KEYS.has(key) ? (
-                  <textarea
-                    value={values[key] ?? ''}
-                    onChange={(e) => setValues((v) => ({ ...v, [key]: e.target.value }))}
-                    rows={key.endsWith('.list') ? 12 : 4}
-                    className="w-full rounded-lg border border-neutral-300 px-3 py-2 font-mono text-xs"
-                  />
-                ) : (
-                  <input
-                    value={values[key] ?? ''}
-                    onChange={(e) => setValues((v) => ({ ...v, [key]: e.target.value }))}
-                    className="w-full rounded-lg border border-neutral-300 px-3 py-2"
-                  />
-                )}
-              </div>
+              <KeyEditor
+                key={key}
+                contentKey={key}
+                value={values[key] ?? ''}
+                onChange={(v) => setValues((s) => ({ ...s, [key]: v }))}
+              />
             ))}
           </div>
         )}
