@@ -15,12 +15,43 @@ export interface WorkItem {
   title: string;
   description: string;
   stats: string; // JSON-encoded WorkStat[]
+  image?: string; // /img/... or an uploaded URL
+  client?: string;
+  year?: string;
+  href?: string;
 }
 
 export interface PortfolioItem {
   icon: string;
   title: string;
   description: string;
+  image?: string;
+  category?: string; // filter chip label, e.g. "Copywriting"
+  subtitle?: string; // small overlay caption
+}
+
+export interface ExperienceItem {
+  title: string;
+  date: string; // e.g. "2025 · Photography & Exhibition"
+  description: string;
+  tags: string[];
+  images?: string[]; // shown on the last (expanded) row
+}
+
+export interface InsightItem {
+  category: string;
+  meta: string;
+  title: string;
+  description: string;
+  image?: string;
+}
+
+export interface PromoBanner {
+  kicker: string;
+  title: string;
+  description: string;
+  cta: string;
+  image?: string;
 }
 
 export interface TestimonialItem {

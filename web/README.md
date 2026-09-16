@@ -41,6 +41,15 @@ Visit `http://localhost:3000` for the public site and `/admin/login` for the das
 - Media library: the old admin's "list uploaded images" endpoint never existed (stubbed no-op). This app adds a working one (`listImagesAction`).
 - No hardcoded fallback secrets or admin password — the app requires `SESSION_SECRET` and `ADMIN_PASSWORD` (seed-only) to be set explicitly.
 
-### Known gaps (tracked, not blocking)
+### Editorial redesign (September 2026)
 
-- Visual redesign is a separate, later pass — this app currently ports the existing look, not a new design.
+- The public page now uses the editorial layout (hero portrait, Latest Works, filterable portfolio, Experiences, promo banner, About, Insights, testimonials, contact, dark footer). Styles live in `app/site.css`, scoped under `.site` so they never affect the admin. Sections are in `components/site/`.
+- Photos live in `public/img/` and are served through `next/image`. Lists saved before the `image` fields existed fall back to the photo for that title (`lib/site-defaults.ts`).
+- New content keys: `hero.image`, `hero.stats`, `services.description`, `experience.list`, `promo.banner`, `insights.list`. `npm run db:seed` adds missing keys to an existing database without overwriting anything. `layout.order` and `theme.config` are no longer read.
+
+### Contact form and inbox
+
+- The form posts to a Server Action (`app/contact-actions.ts`): zod validation, honeypot field, best-effort per-IP throttle, then a row in the `submissions` table and an email through Resend (`lib/contact.ts`).
+- Set `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, and `CONTACT_FROM_EMAIL` (a sender on a domain verified in Resend). Without them the message is still stored and the admin Inbox shows "Email not sent".
+- The admin dashboard's **Inbox** lists submissions with filters, status (new/read/replied/archived), reply-by-email, and delete (admins only).
+- Adding the table to an existing database: `npm run db:migrate` against that database (migration `0001`).

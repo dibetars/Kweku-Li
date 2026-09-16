@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import { revalidatePath } from 'next/cache';
 import { put, list, del } from '@vercel/blob';
 import { db } from '@/lib/db/client';
-import { users, content, auditLogs } from '@/lib/db/schema';
+import { users, content, auditLogs, submissions } from '@/lib/db/schema';
 import { getSession, requireUser, requireRole } from '@/lib/session';
 import { logAudit } from '@/lib/audit';
 
@@ -212,5 +212,43 @@ export async function deleteImageAction(url: string): Promise<ActionResult> {
     return { ok: true };
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : 'Delete failed.' };
+  }
+}
+
+// ---------- Contact submissions (Inbox) ----------
+
+export type SubmissionRow = typeof submissions.$inferSelect;
+
+const SUBMISSION_STATUSES = ['new', 'read', 'replied', 'archived'] as const;
+
+export async function listSubmissionsAction(): Promise<SubmissionRow[]> {
+  await requireRole('admin', 'editor');
+  return db.select().from(submissions).orderBy(desc(submissions.id)).limit(500);
+}
+
+export async function unreadSubmissionCountAction(): Promise<number> {
+  await requireUser();
+  const rows = await db.select({ id: submissions.id }).from(submissions).where(eq(submissions.status, 'new'));
+  return rows.length;
+}
+
+export async function setSubmissionStatusAction(id: number, status: string): Promise<ActionResult> {
+  try {
+    await requireRole('admin', 'editor');
+    if (!(SUBMISSION_STATUSES as readonly string[]).includes(status)) return { ok: false, error: 'Invalid status.' };
+    await db.update(submissions).set({ status }).where(eq(submissions.id, id));
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : 'Failed to update.' };
+  }
+}
+
+export async function deleteSubmissionAction(id: number): Promise<ActionResult> {
+  try {
+    await requireRole('admin');
+    await db.delete(submissions).where(eq(submissions.id, id));
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: err instanceof Error ? err.message : 'Failed to delete.' };
   }
 }

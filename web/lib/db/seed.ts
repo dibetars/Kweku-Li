@@ -35,7 +35,18 @@ async function main() {
     await db.insert(content).values(rows);
     console.log(`Seeded ${rows.length} content rows.`);
   } else {
-    console.log('Content table already has data, skipping content seed.');
+    // Existing database: add any keys introduced since it was seeded, never overwrite edits.
+    const have = new Set(existingContent.map((r) => r.key));
+    const now = new Date().toISOString();
+    const missing = Object.entries(SEED_CONTENT)
+      .filter(([key]) => !have.has(key))
+      .map(([key, value]) => ({ key, value, updatedAt: now }));
+    if (missing.length) {
+      await db.insert(content).values(missing);
+      console.log(`Added ${missing.length} new content keys: ${missing.map((m) => m.key).join(', ')}`);
+    } else {
+      console.log('Content table already has every key, nothing to add.');
+    }
   }
 }
 

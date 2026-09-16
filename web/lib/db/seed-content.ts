@@ -1,5 +1,8 @@
-// Ported verbatim from the previous Express app's SEED_CONTENT (server/index.js).
+// Ported verbatim from the previous Express app's SEED_CONTENT (server/index.js), then extended
+// with the image fields and sections added in the editorial redesign.
 // This is the entire site's copy — do not re-author, only extend.
+import { EXPERIENCES, INSIGHTS, PROMO } from '../site-defaults';
+
 export const SEED_CONTENT: Record<string, string> = {
   'hero.subtitle': 'Visual Storyteller & Creative Strategist',
   'layout.order': JSON.stringify(['hero', 'services', 'work', 'portfolio', 'about', 'testimonials', 'contact']),
@@ -8,6 +11,12 @@ export const SEED_CONTENT: Record<string, string> = {
   'footer.copyright': '© 2026 Kweku Diaw. Visual Storyteller & Creative Strategist.',
   'hero.title': JSON.stringify({ text: 'I help brands tell <span class="italic-text">stories</span> that make customers fall in <span class="italic-text">love</span>' }),
   'hero.description': "A multifaceted creative professional bridging photography, copywriting, marketing strategy, and visual communication. From capturing Black cosplay culture to launching independent artists to mainstream success, I create work that matters.",
+  'hero.image': '/img/hero-portrait.png',
+  'hero.stats': JSON.stringify([
+    { number: '21.7K', label: 'First-week campaign streams' },
+    { number: '5', label: 'Major publications featured' },
+  ]),
+  'services.description': 'Combining creativity with strategic thinking to deliver results that exceed expectations',
 
   'services.list': JSON.stringify([
     { icon: '📸', title: 'Photography & Visual Communication', description: "Commercial photography specializing in portraiture, fashion, and cultural documentation. Master's degree in Visual Communication from Ohio University with a focus on representation and storytelling." },
@@ -23,6 +32,9 @@ export const SEED_CONTENT: Record<string, string> = {
       icon: '🎵',
       tag: 'Marketing Campaign',
       title: 'Greetings From Abroad',
+      image: '/img/case-greetings-from-abroad.jpg',
+      client: 'KooKusi',
+      year: '2023',
       description: "Marketing campaign for independent hip-hop artist's sophomore EP addressing Ghanaian youth seeking opportunities abroad. Artist was physically in the U.S. during entire campaign.",
       stats: JSON.stringify([
         { number: '21.7K', label: 'First Week Streams' },
@@ -35,6 +47,9 @@ export const SEED_CONTENT: Record<string, string> = {
       icon: '🎤',
       tag: 'Album Launch',
       title: '5Foot3 Debut EP',
+      image: '/img/case-5foot3.jpg',
+      client: 'KooKusi',
+      year: '2022',
       description: "Launch campaign for unknown artist's debut project addressing mental health and socio-cultural issues. Created safe spaces for conversations while artist pursued PhD in U.S.",
       stats: JSON.stringify([
         { number: '2x', label: 'Organic Twitter Trends' },
@@ -47,6 +62,9 @@ export const SEED_CONTENT: Record<string, string> = {
       icon: '🎭',
       tag: 'Cultural Project',
       title: 'AfrOtakus: Black People & Cosplay',
+      image: '/img/case-afrotakus.jpg',
+      client: 'Ohio University',
+      year: '2025',
       description: "Photographic documentation of Black cosplay culture exploring identity, representation, and cultural appreciation in Japanese anime fandom. Master's thesis project turned cultural movement.",
       stats: JSON.stringify([
         { number: 'Gallery', label: 'Exhibition in Athens, OH' },
@@ -58,13 +76,17 @@ export const SEED_CONTENT: Record<string, string> = {
   ]),
 
   'portfolio.list': JSON.stringify([
-    { icon: '🌐', title: 'Web Copywriting', description: 'Hubject (eRoaming), PayPlux (Crypto), Bewsys (ICT), BS Holding, UrbanPlug (Solar), Irrigation Hub - Complete information architecture and copy for 7+ websites' },
-    { icon: '🎬', title: 'Video Copywriting', description: "Tekura (Furniture), FanMilk SuperYogo (Father's Day), Goldkey (Founder's Day) - Poetic scripts combining brand storytelling with cultural commentary" },
-    { icon: '📰', title: 'Journalism', description: '25+ articles for Ohio University covering arts, culture, sports, and academia. Features in Dallas Morning News, MyJoyOnline, VARIANT Magazine' },
-    { icon: '📸', title: 'Photography', description: 'Portraiture, Still Life, and Cosplay photography. Specializing in candid storytelling and cultural documentation with technical mastery' },
-    { icon: '🚀', title: 'Marketing Campaigns', description: 'QodeHub Internship (500+ video views unpaid), SASA Urban Lights (organic Twitter trend), multiple music releases with sustained 2-3 month relevance' },
-    { icon: '🎤', title: 'The Li Chronicles', description: 'Spoken word poetry, visual storytelling, and sonic narratives. "The cadence of a rapper. The delivery of a warrior. And a message rooted in spoken word poetry."' },
+    { icon: '🌐', image: '/img/portfolio-web-copywriting.jpg', category: 'Copywriting', subtitle: 'Copy systems', title: 'Web Copywriting', description: 'Hubject (eRoaming), PayPlux (Crypto), Bewsys (ICT), BS Holding, UrbanPlug (Solar), Irrigation Hub - Complete information architecture and copy for 7+ websites' },
+    { icon: '🎬', image: '/img/portfolio-video-copywriting.jpg', category: 'Copywriting', subtitle: 'Scripts', title: 'Video Copywriting', description: "Tekura (Furniture), FanMilk SuperYogo (Father's Day), Goldkey (Founder's Day) - Poetic scripts combining brand storytelling with cultural commentary" },
+    { icon: '📰', image: '/img/portfolio-journalism.jpg', category: 'Journalism', subtitle: '25+ articles', title: 'Journalism', description: '25+ articles for Ohio University covering arts, culture, sports, and academia. Features in Dallas Morning News, MyJoyOnline, VARIANT Magazine' },
+    { icon: '📸', image: '/img/portfolio-photography.jpg', category: 'Photography', subtitle: 'Portraiture', title: 'Photography', description: 'Portraiture, Still Life, and Cosplay photography. Specializing in candid storytelling and cultural documentation with technical mastery' },
+    { icon: '🚀', image: '/img/portfolio-marketing-campaigns.jpg', category: 'Campaigns', subtitle: 'Music releases', title: 'Marketing Campaigns', description: 'QodeHub Internship (500+ video views unpaid), SASA Urban Lights (organic Twitter trend), multiple music releases with sustained 2-3 month relevance' },
+    { icon: '🎤', image: '/img/portfolio-li-chronicles.jpg', category: 'Spoken Word', subtitle: 'The Li Chronicles', title: 'The Li Chronicles', description: 'Spoken word poetry, visual storytelling, and sonic narratives. "The cadence of a rapper. The delivery of a warrior. And a message rooted in spoken word poetry."' },
   ]),
+
+  'experience.list': JSON.stringify(EXPERIENCES),
+  'promo.banner': JSON.stringify(PROMO),
+  'insights.list': JSON.stringify(INSIGHTS),
 
   'about.intro': "Hi! I'm Kweku Diaw. I have a way with words that translates into images that interest brands and businesses. I help customers fall in love with brands and their products.",
   'about.professional': "A multifaceted visual communicator, music journalist, and digital strategist with a Master's degree in Visual Communication from Ohio University, specializing in commercial photography. My work spans copywriting, photography, marketing strategy, and journalism - always with a focus on storytelling that drives results.",

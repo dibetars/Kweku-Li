@@ -25,3 +25,22 @@ export const auditLogs = sqliteTable('audit_logs', {
   createdAt: text('created_at').notNull(),
   ip: text('ip'),
 });
+
+export const submissions = sqliteTable('submissions', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  phone: text('phone'),
+  company: text('company'),
+  service: text('service'),
+  timeline: text('timeline'),
+  budget: text('budget'),
+  location: text('location'),
+  message: text('message').notNull(),
+  ip: text('ip'),
+  userAgent: text('user_agent'),
+  status: text('status').notNull().default('new'), // 'new' | 'read' | 'replied' | 'archived'
+  emailStatus: text('email_status'), // 'sent' | 'failed: <reason>'
+  emailSentAt: text('email_sent_at'),
+  createdAt: text('created_at').notNull(),
+});

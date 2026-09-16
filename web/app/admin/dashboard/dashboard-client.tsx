@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition, useActionState, useEffect } from 'react';
+import { useState, useTransition, useActionState, useEffect, useCallback } from 'react';
 import type { SessionUser } from '@/lib/session';
 import type { ContentMap } from '@/lib/content';
 import {
@@ -13,7 +13,9 @@ import {
   uploadImageAction,
   listImagesAction,
   deleteImageAction,
+  unreadSubmissionCountAction,
 } from '../actions';
+import { InboxPanel } from './inbox-panel';
 
 type Section =
   | 'hero'
@@ -22,18 +24,24 @@ type Section =
   | 'portfolio'
   | 'about'
   | 'testimonials'
+  | 'experiences'
+  | 'promo'
+  | 'insights'
   | 'contact'
   | 'layout'
-  | 'theme'
+  | 'inbox'
   | 'users'
   | 'logs'
   | 'media';
 
 const SECTIONS: { id: Section; label: string; keys?: string[] }[] = [
-  { id: 'hero', label: 'Hero', keys: ['hero.subtitle', 'hero.title', 'hero.description'] },
-  { id: 'services', label: 'Services', keys: ['services.list'] },
-  { id: 'work', label: 'Work', keys: ['work.list'] },
+  { id: 'hero', label: 'Hero', keys: ['hero.subtitle', 'hero.title', 'hero.stats', 'hero.image'] },
+  { id: 'services', label: 'Services', keys: ['services.description', 'services.list'] },
+  { id: 'work', label: 'Latest Works', keys: ['work.list'] },
   { id: 'portfolio', label: 'Portfolio', keys: ['portfolio.list'] },
+  { id: 'experiences', label: 'Experiences', keys: ['experience.list'] },
+  { id: 'promo', label: 'Promo Banner', keys: ['promo.banner'] },
+  { id: 'insights', label: 'Insights', keys: ['insights.list'] },
   {
     id: 'about',
     label: 'About',
@@ -55,8 +63,8 @@ const SECTIONS: { id: Section; label: string; keys?: string[] }[] = [
       'social.soundcloud',
     ],
   },
-  { id: 'layout', label: 'Layout & Navigation', keys: ['layout.order', 'header.logo', 'header.cta', 'footer.quote', 'footer.copyright'] },
-  { id: 'theme', label: 'Theme Settings', keys: ['theme.config'] },
+  { id: 'layout', label: 'Navigation & Footer', keys: ['header.logo', 'header.cta', 'footer.quote', 'footer.copyright'] },
+  { id: 'inbox', label: 'Inbox' },
   { id: 'users', label: 'Users' },
   { id: 'logs', label: 'Audit Logs' },
   { id: 'media', label: 'Media Library' },
@@ -65,10 +73,15 @@ const SECTIONS: { id: Section; label: string; keys?: string[] }[] = [
 const LABELS: Record<string, string> = {
   'hero.subtitle': 'Subtitle',
   'hero.title': 'Title (JSON: { "text": "..." }, supports <span class="italic-text">)',
-  'hero.description': 'Description',
+  'hero.stats': 'Hero stats (JSON array of { number, label }, shown with a + prefix)',
+  'hero.image': 'Hero portrait URL (transparent PNG works best; upload via Media Library)',
+  'services.description': 'Services intro line',
   'services.list': 'Services (JSON array of { icon, title, description })',
-  'work.list': 'Case studies (JSON array of { icon, tag, title, description, stats })',
-  'portfolio.list': 'Portfolio items (JSON array of { icon, title, description })',
+  'work.list': 'Latest works (JSON array of { icon, tag, title, description, stats, image, client, year })',
+  'portfolio.list': 'Portfolio items (JSON array of { icon, title, description, image, category, subtitle })',
+  'experience.list': 'Experiences (JSON array of { title, date, description, tags[], images[] }; the last row is expanded)',
+  'promo.banner': 'Promo banner (JSON: { kicker, title, description, cta, image })',
+  'insights.list': 'Insight cards (JSON array of { category, meta, title, description, image })',
   'about.intro': 'Intro',
   'about.professional': 'Professional',
   'about.artist': 'Artist',
@@ -84,27 +97,26 @@ const LABELS: Record<string, string> = {
   'social.youtube': 'YouTube URL',
   'social.tiktok': 'TikTok URL',
   'social.soundcloud': 'SoundCloud URL',
-  'layout.order': 'Section order (JSON array of ids, e.g. ["hero","services",...])',
-  'header.logo': 'Logo text',
+  'header.logo': 'Logo text (short, shown in a square badge)',
   'header.cta': 'Header CTA (JSON: { text, href })',
   'footer.quote': 'Footer quote',
   'footer.copyright': 'Footer copyright',
-  'theme.config': 'Theme config (JSON: { mode, variables })',
 };
 
 const MULTILINE_KEYS = new Set([
-  'hero.description',
+  'hero.stats',
   'services.list',
   'work.list',
   'portfolio.list',
+  'experience.list',
+  'promo.banner',
+  'insights.list',
   'testimonials.list',
   'about.professional',
   'about.artist',
   'about.philosophy',
   'about.mission',
-  'layout.order',
   'header.cta',
-  'theme.config',
 ]);
 
 export function Dashboard({ user, initialContent }: { user: SessionUser; initialContent: ContentMap }) {
@@ -112,6 +124,15 @@ export function Dashboard({ user, initialContent }: { user: SessionUser; initial
   const [values, setValues] = useState<ContentMap>(initialContent);
   const [status, setStatus] = useState('');
   const [pending, startTransition] = useTransition();
+  const [unread, setUnread] = useState(0);
+
+  const refreshUnread = useCallback(() => {
+    unreadSubmissionCountAction().then(setUnread).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    refreshUnread();
+  }, [refreshUnread]);
 
   const activeSection = SECTIONS.find((s) => s.id === active)!;
 
@@ -138,11 +159,16 @@ export function Dashboard({ user, initialContent }: { user: SessionUser; initial
             <button
               key={s.id}
               onClick={() => setActive(s.id)}
-              className={`block w-full rounded-lg px-3 py-2 text-left text-sm ${
+              className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm ${
                 active === s.id ? 'bg-black text-white' : 'hover:bg-neutral-100'
               }`}
             >
-              {s.label}
+              <span>{s.label}</span>
+              {s.id === 'inbox' && unread > 0 && (
+                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${active === s.id ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                  {unread}
+                </span>
+              )}
             </button>
           ))}
         </nav>
@@ -184,7 +210,7 @@ export function Dashboard({ user, initialContent }: { user: SessionUser; initial
                   <textarea
                     value={values[key] ?? ''}
                     onChange={(e) => setValues((v) => ({ ...v, [key]: e.target.value }))}
-                    rows={key.endsWith('.list') || key === 'theme.config' ? 12 : 4}
+                    rows={key.endsWith('.list') ? 12 : 4}
                     className="w-full rounded-lg border border-neutral-300 px-3 py-2 font-mono text-xs"
                   />
                 ) : (
@@ -199,6 +225,7 @@ export function Dashboard({ user, initialContent }: { user: SessionUser; initial
           </div>
         )}
 
+        {active === 'inbox' && <InboxPanel isAdmin={user.role === 'admin'} onChange={refreshUnread} />}
         {active === 'users' && <UsersPanel />}
         {active === 'logs' && <LogsPanel />}
         {active === 'media' && <MediaPanel />}
