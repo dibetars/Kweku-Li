@@ -234,6 +234,7 @@ export const EDITORS: Record<string, EditorDef> = {
 
 // Photos shipped with the site, offered in the image picker alongside uploads.
 export const BUNDLED_IMAGES = [
+  '/img/fw-variant-cover.jpg',
   '/img/about-hero-red.jpg',
   '/img/cs-next-cover.jpg',
   '/img/cs-next-2.jpg',

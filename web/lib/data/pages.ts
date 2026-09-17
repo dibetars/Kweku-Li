@@ -72,7 +72,7 @@ export const FEATURED_WORK: FeaturedWorkItem[] = [ // featured.work
   { title: 'Here I Am', year: '', category: 'Kinpee ft. Li & Evance', image: '', video: 'https://www.youtube.com/watch?v=I5FIkqipNjY', url: '', caseStudy: '' },
   { title: 'Welcome to the DVRE MOVEMENT', year: '', category: 'The Li Chronicles', image: '', video: 'https://www.youtube.com/watch?v=aNimMhiVQ8A', url: '', caseStudy: '' },
   { title: 'AfrOtakus: Black Cosplay Culture', year: '2025', category: 'Photography', image: '/img/cs-afrotakus-cover.jpg', video: '', url: '', caseStudy: 'afrotakus' },
-  { title: 'VARIANT MAGAZINE: DIVINITY [Robert Wun]', year: '', category: 'Journalism', image: '', video: '', url: 'https://issuu.com/vrntmagazine/docs/vrnt_falldraft7.2_compressed', caseStudy: '' },
+  { title: 'VARIANT MAGAZINE: DIVINITY [Robert Wun]', year: '', category: 'Journalism', image: '/img/fw-variant-cover.jpg', video: '', url: 'https://issuu.com/vrntmagazine/docs/vrnt_falldraft7.2_compressed', caseStudy: '' },
 ];
 
 export const HOME_ABOUT: HomeAbout = { // home.about
