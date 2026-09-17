@@ -23,8 +23,8 @@ export default async function AboutPage() {
           </p>
           <p className="about-intro-line">{a.intro}</p>
         </div>
-        <figure className="about-hero-figure">
-          <Media src="/img/about-portrait-tall.png" alt="Kweku Diaw" sizes="(max-width: 980px) 100vw, 40vw" priority position="top center" />
+        <figure className="about-hero-figure about-hero-color">
+          <Media src="/img/about-hero-red.jpg" alt="Kweku Diaw" sizes="(max-width: 980px) 100vw, 40vw" priority position="center 20%" />
         </figure>
       </section>
 
@@ -52,6 +52,9 @@ export default async function AboutPage() {
         <div className="section-intro">
           <p className="section-kicker">Portfolio</p>
           <h2 className="section-title">A writer at heart</h2>
+          <figure className="about-portfolio-figure">
+            <Media src="/img/about-portrait-tall.png" alt="Kweku Diaw in profile" sizes="(max-width: 980px) 100vw, 45vw" position="center 25%" />
+          </figure>
         </div>
         <div className="section-side-copy">
           <Paragraphs text={a.portfolioBlurb} className="section-description" />

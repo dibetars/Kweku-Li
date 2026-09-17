@@ -62,6 +62,7 @@ export interface PortfolioEntry {
   outlet: string; // optional sub-heading, e.g. "Cincinnati Opera"
   url: string;
   caseStudy: string;
+  image?: string; // small thumbnail beside the entry
 }
 
 export interface PortfolioGroup {

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import type { PortfolioGroup } from '@/lib/types';
@@ -22,6 +23,7 @@ export function PortfolioList({ groups }: { groups: PortfolioGroup[] }) {
       {visible.map((g) => {
         // Consecutive entries from the same outlet sit under one sub-heading.
         let lastOutlet = '';
+        const thumbs = g.entries.some((e) => e.image);
         return (
           <section className="portfolio-group" key={g.title}>
             <h2 className="portfolio-group-title">{g.title}</h2>
@@ -33,8 +35,13 @@ export function PortfolioList({ groups }: { groups: PortfolioGroup[] }) {
                 return (
                   <li key={`${e.title}-${i}`} className="portfolio-entry-wrap">
                     {showOutlet && <p className="portfolio-outlet">{e.outlet}</p>}
-                    <div className="portfolio-entry">
+                    <div className={`portfolio-entry${thumbs ? ' has-thumb' : ''}`}>
                       <span className="portfolio-year">{e.year}</span>
+                      {thumbs && (
+                        <span className={`portfolio-thumb${e.image ? '' : ' is-empty'}`}>
+                          {e.image && <Image src={e.image} alt="" fill sizes="96px" />}
+                        </span>
+                      )}
                       <span className="portfolio-title">{e.title}</span>
                       <span className="portfolio-action">
                         {e.caseStudy ? (

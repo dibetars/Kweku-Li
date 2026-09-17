@@ -69,7 +69,7 @@ export function buildSiteContent(c: ContentMap) {
     contact: {
       email: text(c, 'contact.email', 'kwekuk.diaw@gmail.com'),
       phone: text(c, 'contact.phone', ''),
-      location: text(c, 'contact.location', ''),
+      location: text(c, 'contact.location', D.CONTACT_LOCATION),
     },
     socials: c,
   };

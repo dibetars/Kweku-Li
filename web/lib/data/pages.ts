@@ -29,7 +29,6 @@ export const HERO_STATS: Stat[] = [ // hero.stats
 
 export const FILMS: Film[] = [ // home.films
   { title: 'The 5foot3 Story', video: 'https://www.youtube.com/watch?v=IkioLhgPOzQ' },
-  { title: 'Welcome to the DVRE MOVEMENT', video: 'https://www.youtube.com/watch?v=aNimMhiVQ8A' },
 ];
 
 export const SERVICES_INTRO = 'Combining creativity with strategic thinking to deliver results that exceed expectations.'; // services.description
@@ -61,9 +60,9 @@ export const SERVICES: ServiceItem[] = [ // services.list
 ];
 
 export const FEATURED_CASES: FeaturedWorkItem[] = [ // featured.cases
-  { title: 'Building Community Around Cincinnati Opera’s Black Opera Project', year: '2026', category: 'Lalovavi', image: '/img/cs-lalovavi-stage.jpg', video: '', url: '', caseStudy: 'lalovavi' },
-  { title: 'NEXT Website & Socials', year: '2026', category: 'Web & Social', image: '', video: '', url: 'https://www.nextohio.com/', caseStudy: '' },
-  { title: 'The Launchpad MAG', year: '2025', category: 'Class of 2024 & 2025', image: '', video: '', url: '', caseStudy: '' },
+  { title: 'Cincinnati Opera’s Black Opera Project: Lalovavi', year: '2026', category: 'Creative Direction', image: '/img/cs-lalovavi-stage.jpg', video: '', url: '', caseStudy: 'lalovavi' },
+  { title: 'NEXT', year: '2026', category: 'Website & Socials', image: '/img/cs-next-cover.jpg', video: '', url: 'https://www.nextohio.com/', caseStudy: '' },
+  { title: 'Ohio University Music Industry Summit: The Launchpad MAG (Vol 2)', year: '2026', category: 'Creative Direction', image: '/img/cs-launchpad-cover.jpg', video: '', url: '', caseStudy: '' },
   { title: 'This Ability', year: '2025', category: 'Executive Production', image: '/img/cs-this-ability-cover.jpg', video: '', url: '', caseStudy: 'this-ability' },
 ];
 
@@ -72,7 +71,7 @@ export const FEATURED_WORK: FeaturedWorkItem[] = [ // featured.work
   { title: 'The 5foot3 Story', year: '', category: 'Film', image: '', video: 'https://www.youtube.com/watch?v=IkioLhgPOzQ', url: '', caseStudy: '5foot3' },
   { title: 'Here I Am', year: '', category: 'Kinpee ft. Li & Evance', image: '', video: 'https://www.youtube.com/watch?v=I5FIkqipNjY', url: '', caseStudy: '' },
   { title: 'Welcome to the DVRE MOVEMENT', year: '', category: 'The Li Chronicles', image: '', video: 'https://www.youtube.com/watch?v=aNimMhiVQ8A', url: '', caseStudy: '' },
-  { title: 'AfrOtakus: Black Cosplay Culture', year: '2025', category: 'Photography', image: '/img/case-afrotakus.jpg', video: '', url: '', caseStudy: 'afrotakus' },
+  { title: 'AfrOtakus: Black Cosplay Culture', year: '2025', category: 'Photography', image: '/img/cs-afrotakus-cover.jpg', video: '', url: '', caseStudy: 'afrotakus' },
   { title: 'VARIANT MAGAZINE: DIVINITY [Robert Wun]', year: '', category: 'Journalism', image: '', video: '', url: 'https://issuu.com/vrntmagazine/docs/vrnt_falldraft7.2_compressed', caseStudy: '' },
 ];
 
@@ -100,7 +99,8 @@ export const SERVICE_OPTIONS = [ // options in the contact form
 ];
 
 export const CONTACT_INTRO = // contact.intro
-  "I'm open to working on projects that help brands and businesses tell their stories creatively. Whether it's photography, copywriting, marketing strategy, or cultural projects, let's talk.";
+  "I'm open to working on remote and in-person projects that help brands and businesses tell their stories creatively. Whether it's photography, copywriting, marketing strategy, or cultural projects, let's talk.";
+export const CONTACT_LOCATION = 'Athens, Ohio, USA'; // contact.location
 
 // ---------- Testimonials (About page, and the first three on the homepage) ----------
 
@@ -148,6 +148,8 @@ His career began in digital products and advertising agencies, where he gained m
 
 // ---------- Portfolio ----------
 
+const LAUNCHPAD_VOL1 =
+  'https://catmailohio-my.sharepoint.com/my?id=%2Fpersonal%2Fkd449322%5Fohio%5Fedu%2FDocuments%2FLaunchpad%20Mag%20Final%20Version%2Epdf&parent=%2Fpersonal%2Fkd449322%5Fohio%5Fedu%2FDocuments';
 const CO = (y: string, title: string, url: string) => ({ year: y, title, outlet: 'Cincinnati Opera', url, caseStudy: '' });
 const OU = (y: string, title: string, url: string) => ({ year: y, title, outlet: 'Ohio University Student News Bureau', url, caseStudy: '' });
 
@@ -159,12 +161,12 @@ export const PORTFOLIO_GROUPS: PortfolioGroup[] = [ // portfolio.groups
     title: 'Creative Direction',
     description: '',
     entries: [
-      { year: '2026', title: 'Building Community Around Cincinnati Opera’s Black Opera Project: Lalovavi', outlet: '', url: '', caseStudy: 'lalovavi' },
-      { year: '2026', title: 'The Launchpad MAG (Class of 2026)', outlet: '', url: '', caseStudy: '' },
-      { year: '2026', title: 'Inaugural Scripps Career Success Day', outlet: '', url: '', caseStudy: 'scripps-career-success-day' },
-      { year: '2026', title: 'NEXT Website & Socials', outlet: '', url: 'https://www.nextohio.com/', caseStudy: '' },
-      { year: '2025', title: 'Ananse’s Journey', outlet: '', url: 'https://www.anansesjourney.com/', caseStudy: '' },
-      { year: '2025', title: 'The Launchpad MAG (Class of 2024 & 2025)', outlet: '', url: '', caseStudy: '' },
+      { year: '2026', title: 'Cincinnati Opera’s Black Opera Project: Lalovavi', outlet: '', url: '', caseStudy: 'lalovavi', image: '/img/cs-lalovavi-stage.jpg' },
+      { year: '2026', title: 'NEXT', outlet: '', url: 'https://www.nextohio.com/', caseStudy: '', image: '/img/cs-next-cover.jpg' },
+      { year: '2026', title: 'Ohio University Music Industry Summit: The Launchpad MAG (Vol 2)', outlet: '', url: '', caseStudy: '', image: '/img/cs-launchpad-cover.jpg' },
+      { year: '2025', title: 'Ananse’s Journey', outlet: '', url: 'https://www.anansesjourney.com/', caseStudy: '', image: '/img/cs-ananse-cover.jpg' },
+      { year: '2025', title: 'Ohio University Music Industry Summit: The Launchpad MAG (Vol 1)', outlet: '', url: LAUNCHPAD_VOL1, caseStudy: '', image: '' },
+      { year: '2026', title: 'Inaugural Scripps Career Success Day', outlet: '', url: '', caseStudy: 'scripps-career-success-day', image: '/img/cs-scripps-schedule.jpg' },
     ],
   },
   {
@@ -182,7 +184,7 @@ export const PORTFOLIO_GROUPS: PortfolioGroup[] = [ // portfolio.groups
       OU('2024', 'Acting & Hollywood: A winding path to Hollywood', 'https://news.ohio.edu/news/2024/02/winding-path-hollywood'),
       OU('2025', 'Revolutionizing reporting', 'https://www.ohio.edu/news/2025/06/revolutionizing-reporting'),
       OU('2025', 'From Kenya to Ohio: Bridging continents through music', 'https://www.ohio.edu/news/2025/03/kenya-ohio-bridging-continents-through-music'),
-      { year: '2020–23', title: 'Web copy for Hubject, PayPlux, Bewsys & Irrigation Hub', outlet: 'Brand copywriting', url: '', caseStudy: '' },
+      { year: '2020–26', title: 'Web copy for NEXT, Ananse’s Journey, Hubject & PayPlux', outlet: 'Brand copywriting', url: '', caseStudy: '' },
     ],
   },
   {
@@ -190,7 +192,7 @@ export const PORTFOLIO_GROUPS: PortfolioGroup[] = [ // portfolio.groups
     description: '',
     entries: [
       { year: '2025', title: 'Basiet x Frances', outlet: '', url: '', caseStudy: '' },
-      { year: '2025', title: 'AfrOtakus: Black People & Cosplay', outlet: '', url: '', caseStudy: 'afrotakus' },
+      { year: '2025', title: 'AfrOtakus: Black People & Cosplay', outlet: '', url: '', caseStudy: 'afrotakus', image: '/img/cs-afrotakus-cover.jpg' },
     ],
   },
   {

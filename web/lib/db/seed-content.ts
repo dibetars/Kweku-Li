@@ -20,6 +20,7 @@ export const CONTENT_V2: Record<string, string> = {
   'skills.list': JSON.stringify(D.SKILLS),
   'testimonials.list': JSON.stringify(D.TESTIMONIALS),
   'contact.intro': D.CONTACT_INTRO,
+  'contact.location': D.CONTACT_LOCATION,
   'header.cta': JSON.stringify({ text: 'Book A Call', href: '/contact' }),
   'casestudies.list': JSON.stringify(CASE_STUDIES),
   'about.page': JSON.stringify(D.ABOUT_PAGE),

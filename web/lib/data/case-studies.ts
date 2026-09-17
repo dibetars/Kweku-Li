@@ -263,7 +263,7 @@ It was incredibly rewarding to see an event go from ideas on a piece of paper to
     role: 'Photographer & researcher',
     summary:
       'A grant-winning, exhibition-featured photography project documenting Black cosplay culture and identity in anime fandom.',
-    cover: '/img/case-afrotakus.jpg',
+    cover: '/img/cs-afrotakus-cover.jpg',
     stats: [
       { number: 'Gallery', label: 'Exhibition in Athens, OH' },
       { number: 'Video', label: 'Documentary interview' },
@@ -276,7 +276,17 @@ It was incredibly rewarding to see an event go from ideas on a piece of paper to
         bullets: [],
       },
     ],
-    gallery: [],
+    gallery: [
+      '/img/cs-afrotakus-1.jpg',
+      '/img/cs-afrotakus-2.jpg',
+      '/img/cs-afrotakus-3.jpg',
+      '/img/cs-afrotakus-4.jpg',
+      '/img/cs-afrotakus-5.jpg',
+      '/img/cs-afrotakus-6.jpg',
+      '/img/cs-afrotakus-7.jpg',
+      '/img/cs-afrotakus-8.jpg',
+      '/img/cs-afrotakus-9.jpg',
+    ],
     videos: [],
     links: [
       { label: 'AfrOtakus project page', url: 'https://pollen-shadow-f66.notion.site/AfrOtakus-Black-People-Cosplay-7f5b46e111f74c54a20e2e6ed0a179db' },

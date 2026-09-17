@@ -61,7 +61,7 @@ export function Films({ s }: { s: SiteContent }) {
   if (!s.films.length) return null;
   return (
     <section className="films" id="films">
-      <div className="films-grid">
+      <div className={`films-grid${s.films.length === 1 ? ' films-single' : ''}`}>
         {s.films.map((f) => (
           <div className="film" key={f.video}>
             <YouTube url={f.video} title={f.title} />

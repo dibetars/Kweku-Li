@@ -1899,16 +1899,21 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.5rem 1.5rem;
+    align-items: center;
+    gap: 0 2rem;
+    margin-top: 0.5rem;
     color: var(--text-main);
 }
 
-.site .vision-details a {
-    color: var(--text-main);
-    text-decoration: none;
+.site .vision-details a,
+.site .vision-details span {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
+    line-height: 1.4;
+    color: var(--text-main);
+    text-decoration: none;
+    white-space: nowrap;
 }
 
 /* ---------- Testimonials with initials ---------- */
@@ -2602,4 +2607,73 @@
     font-size: clamp(2.4rem, 5vw, 4.2rem);
     font-weight: 400;
     letter-spacing: -0.04em;
+}
+
+/* ---------- Feedback round (17 Sept) ---------- */
+
+.site .films-single {
+    grid-template-columns: 1fr;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.site .about-portfolio-figure {
+    position: relative;
+    margin: 2rem 0 0;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #d9d8d5;
+}
+
+.site .about-portfolio-figure img {
+    object-fit: cover;
+    filter: grayscale(1);
+}
+
+.site .portfolio-entry.has-thumb {
+    grid-template-columns: 90px 96px minmax(0, 1fr) auto;
+}
+
+.site .portfolio-thumb {
+    position: relative;
+    display: block;
+    width: 96px;
+    aspect-ratio: 4 / 3;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #e5e4e1;
+}
+
+.site .portfolio-thumb img {
+    object-fit: cover;
+}
+
+@media (max-width: 720px) {
+    .site .portfolio-thumb.is-empty {
+        display: none;
+    }
+
+    .site .portfolio-entry.has-thumb {
+        grid-template-columns: 1fr;
+    }
+
+    .site .portfolio-thumb {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .site .vision-details {
+        flex-direction: column;
+        gap: 0;
+    }
+}
+
+/* Portrait photos in landscape cards: keep faces and signage in frame. */
+.site .case-media .case-image {
+    object-position: center 22%;
+}
+
+.site .about-hero-color img {
+    filter: none;
 }
