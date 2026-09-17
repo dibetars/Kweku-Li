@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect, useRef } from 'react';
 import { submitContactAction, type ContactResult } from '@/app/contact-actions';
-import { SERVICE_OPTIONS } from '@/lib/site-defaults';
+import { SERVICE_OPTIONS } from '@/lib/data/pages';
 
 export function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);

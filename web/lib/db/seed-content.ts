@@ -1,7 +1,36 @@
 // Ported verbatim from the previous Express app's SEED_CONTENT (server/index.js), then extended
 // with the image fields and sections added in the editorial redesign.
 // This is the entire site's copy — do not re-author, only extend.
-import { EXPERIENCES, INSIGHTS, PROMO } from '../site-defaults';
+import { CASE_STUDIES } from '../data/case-studies';
+import * as D from '../data/pages';
+
+// Keys for the multi-page site. Exported separately so an existing database can be moved onto them.
+export const CONTENT_V2: Record<string, string> = {
+  'hero.subtitle': D.HERO_ROLES,
+  'hero.title': JSON.stringify({ text: D.HERO_TAGLINE }),
+  'hero.description': D.HERO_DESCRIPTION,
+  'hero.image': D.HERO_IMAGE,
+  'hero.stats': JSON.stringify(D.HERO_STATS),
+  'home.films': JSON.stringify(D.FILMS),
+  'services.description': D.SERVICES_INTRO,
+  'services.list': JSON.stringify(D.SERVICES),
+  'featured.cases': JSON.stringify(D.FEATURED_CASES),
+  'featured.work': JSON.stringify(D.FEATURED_WORK),
+  'home.about': JSON.stringify(D.HOME_ABOUT),
+  'skills.list': JSON.stringify(D.SKILLS),
+  'testimonials.list': JSON.stringify(D.TESTIMONIALS),
+  'contact.intro': D.CONTACT_INTRO,
+  'header.cta': JSON.stringify({ text: 'Book A Call', href: '/contact' }),
+  'casestudies.list': JSON.stringify(CASE_STUDIES),
+  'about.page': JSON.stringify(D.ABOUT_PAGE),
+  'portfolio.intro': D.PORTFOLIO_INTRO,
+  'portfolio.groups': JSON.stringify(D.PORTFOLIO_GROUPS),
+  'sensei.page': JSON.stringify(D.SENSEI_PAGE),
+  'mentors.list': JSON.stringify(D.MENTORS),
+};
+
+// Keys the multi-page site no longer reads.
+export const RETIRED_KEYS = ['work.list', 'portfolio.list', 'experience.list', 'promo.banner', 'insights.list', 'layout.order', 'theme.config', 'about.intro', 'about.professional', 'about.artist', 'about.philosophy', 'about.mission'];
 
 export const SEED_CONTENT: Record<string, string> = {
   'hero.subtitle': 'Visual Storyteller & Creative Strategist',
@@ -84,9 +113,6 @@ export const SEED_CONTENT: Record<string, string> = {
     { icon: '🎤', image: '/img/portfolio-li-chronicles.jpg', category: 'Spoken Word', subtitle: 'The Li Chronicles', title: 'The Li Chronicles', description: 'Spoken word poetry, visual storytelling, and sonic narratives. "The cadence of a rapper. The delivery of a warrior. And a message rooted in spoken word poetry."' },
   ]),
 
-  'experience.list': JSON.stringify(EXPERIENCES),
-  'promo.banner': JSON.stringify(PROMO),
-  'insights.list': JSON.stringify(INSIGHTS),
 
   'about.intro': "Hi! I'm Kweku Diaw. I have a way with words that translates into images that interest brands and businesses. I help customers fall in love with brands and their products.",
   'about.professional': "A multifaceted visual communicator, music journalist, and digital strategist with a Master's degree in Visual Communication from Ohio University, specializing in commercial photography. My work spans copywriting, photography, marketing strategy, and journalism - always with a focus on storytelling that drives results.",
@@ -137,4 +163,7 @@ export const SEED_CONTENT: Record<string, string> = {
       '--text-overlay-muted': 'rgba(255, 255, 255, 0.6)',
     },
   }),
+
+  // ---------- Multi-page site (September 2026) ----------
+  ...CONTENT_V2,
 };

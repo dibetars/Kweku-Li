@@ -61,7 +61,7 @@ export async function setContentAction(key: string, value: string): Promise<Acti
       await logAudit({ userId: user.id, action: 'create', key, before: null, after: value });
     }
 
-    revalidatePath('/');
+    revalidatePath('/', 'layout');
     revalidatePath('/admin');
     return { ok: true };
   } catch (err) {
@@ -87,7 +87,7 @@ export async function setContentBatchAction(
       }
     }
 
-    revalidatePath('/');
+    revalidatePath('/', 'layout');
     revalidatePath('/admin');
     return { ok: true };
   } catch (err) {

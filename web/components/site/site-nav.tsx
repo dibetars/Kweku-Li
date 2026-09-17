@@ -1,23 +1,32 @@
 'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const LINKS = [
-  { href: '#about', label: 'About Me' },
-  { href: '#work', label: 'Portfolio' },
-  { href: '#services', label: 'Services' },
-  { href: '#insights', label: 'Insights' },
+export const NAV_LINKS = [
+  { href: '/about', label: 'About Me' },
+  { href: '/portfolio', label: 'Portfolio' },
+  { href: '/sensei-hood', label: 'Sensei-Hood' },
+  { href: '/contact', label: 'Contact' },
 ];
 
-const MOBILE_LINKS = [
-  ...LINKS.slice(0, 3),
-  { href: '#experiences', label: 'Experiences' },
-  LINKS[3],
-  { href: '#contact', label: 'Contact' },
-];
+export function isActive(pathname: string, href: string) {
+  if (href === '/') return pathname === '/';
+  if (href === '/portfolio') return pathname.startsWith('/portfolio') || pathname.startsWith('/work');
+  return pathname.startsWith(href);
+}
 
 export function SiteNav({ logo, cta }: { logo: string; cta: { text: string; href: string } }) {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  // Close the menu whenever the route changes.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (pathname !== lastPath) {
+    setLastPath(pathname);
+    setOpen(false);
+  }
 
   useEffect(() => {
     document.body.classList.toggle('menu-open', open);
@@ -32,25 +41,29 @@ export function SiteNav({ logo, cta }: { logo: string; cta: { text: string; href
     };
   }, [open]);
 
+  const ctaHref = cta.href === '#contact' ? '/contact' : cta.href;
+
   return (
     <>
       <nav>
         <div className="nav-left">
-          <a href="#home" className="logo">
+          <Link href="/" className="logo" aria-label="Home">
             {logo}
-          </a>
+          </Link>
           <ul className="nav-links">
-            {LINKS.map((l) => (
+            {NAV_LINKS.map((l) => (
               <li key={l.href}>
-                <a href={l.href}>{l.label}</a>
+                <Link href={l.href} className={isActive(pathname, l.href) ? 'is-active' : undefined}>
+                  {l.label}
+                </Link>
               </li>
             ))}
           </ul>
         </div>
         <div className="nav-right">
-          <a href={cta.href} className="arrow-link">
+          <Link href={ctaHref} className="arrow-link">
             {cta.text} <span aria-hidden="true">↗</span>
-          </a>
+          </Link>
           <button
             className="nav-toggle"
             type="button"
@@ -67,17 +80,17 @@ export function SiteNav({ logo, cta }: { logo: string; cta: { text: string; href
       </nav>
       <div className="mobile-menu" id="mobile-menu" hidden={!open}>
         <ul>
-          {MOBILE_LINKS.map((l) => (
+          {[{ href: '/', label: 'Home' }, ...NAV_LINKS].map((l) => (
             <li key={l.href}>
-              <a href={l.href} onClick={() => setOpen(false)}>
+              <Link href={l.href} onClick={() => setOpen(false)}>
                 {l.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
-        <a href={cta.href} className="cta-button" onClick={() => setOpen(false)}>
+        <Link href={ctaHref} className="cta-button" onClick={() => setOpen(false)}>
           {cta.text}
-        </a>
+        </Link>
       </div>
     </>
   );

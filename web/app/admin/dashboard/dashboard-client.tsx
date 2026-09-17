@@ -19,15 +19,13 @@ import { InboxPanel } from './inbox-panel';
 import { KeyEditor } from './field-editors';
 
 type Section =
-  | 'hero'
-  | 'services'
-  | 'work'
+  | 'home'
+  | 'featured'
+  | 'casestudies'
   | 'portfolio'
   | 'about'
   | 'testimonials'
-  | 'experiences'
-  | 'promo'
-  | 'insights'
+  | 'sensei'
   | 'contact'
   | 'layout'
   | 'inbox'
@@ -35,44 +33,30 @@ type Section =
   | 'logs'
   | 'media';
 
-const SECTIONS: { id: Section; label: string; keys?: string[] }[] = [
-  { id: 'hero', label: 'Hero', keys: ['hero.subtitle', 'hero.title', 'hero.stats', 'hero.image'] },
-  { id: 'services', label: 'Services', keys: ['services.description', 'services.list'] },
-  { id: 'work', label: 'Latest Works', keys: ['work.list'] },
-  { id: 'portfolio', label: 'Portfolio', keys: ['portfolio.list'] },
-  { id: 'experiences', label: 'Experiences', keys: ['experience.list'] },
-  { id: 'promo', label: 'Promo Banner', keys: ['promo.banner'] },
-  { id: 'insights', label: 'Insights', keys: ['insights.list'] },
+const SECTIONS: { id: Section; label: string; group: string; keys?: string[]; page?: string }[] = [
   {
-    id: 'about',
-    label: 'About',
-    keys: ['about.intro', 'about.professional', 'about.artist', 'about.philosophy', 'about.mission'],
+    id: 'home',
+    label: 'Home',
+    group: 'Pages',
+    page: '/',
+    keys: ['hero.subtitle', 'hero.title', 'hero.description', 'hero.stats', 'hero.image', 'home.films', 'services.description', 'services.list', 'home.about', 'skills.list', 'contact.intro'],
   },
-  { id: 'testimonials', label: 'Testimonials', keys: ['testimonials.list'] },
-  {
-    id: 'contact',
-    label: 'Contact',
-    keys: [
-      'contact.email',
-      'contact.phone',
-      'contact.location',
-      'social.linkedin',
-      'social.instagram',
-      'social.twitter',
-      'social.youtube',
-      'social.tiktok',
-      'social.soundcloud',
-    ],
-  },
-  { id: 'layout', label: 'Navigation & Footer', keys: ['header.logo', 'header.cta', 'footer.quote', 'footer.copyright'] },
-  { id: 'inbox', label: 'Inbox' },
-  { id: 'users', label: 'Users' },
-  { id: 'logs', label: 'Audit Logs' },
-  { id: 'media', label: 'Media Library' },
+  { id: 'featured', label: 'Home: featured cards', group: 'Pages', page: '/', keys: ['featured.cases', 'featured.work'] },
+  { id: 'about', label: 'About', group: 'Pages', page: '/about', keys: ['about.page'] },
+  { id: 'portfolio', label: 'Portfolio', group: 'Pages', page: '/portfolio', keys: ['portfolio.intro', 'portfolio.groups'] },
+  { id: 'sensei', label: 'Sensei-Hood', group: 'Pages', page: '/sensei-hood', keys: ['sensei.page', 'mentors.list'] },
+  { id: 'contact', label: 'Contact', group: 'Pages', page: '/contact', keys: ['contact.email', 'contact.phone', 'contact.location', 'social.linkedin', 'social.instagram', 'social.twitter', 'social.youtube', 'social.tiktok', 'social.soundcloud'] },
+  { id: 'casestudies', label: 'Case Studies', group: 'Content', page: '/portfolio', keys: ['casestudies.list'] },
+  { id: 'testimonials', label: 'Testimonials', group: 'Content', page: '/about#testimonials', keys: ['testimonials.list'] },
+  { id: 'layout', label: 'Navigation & Footer', group: 'Content', keys: ['header.logo', 'header.cta', 'footer.quote', 'footer.copyright'] },
+  { id: 'inbox', label: 'Inbox', group: 'System' },
+  { id: 'users', label: 'Users', group: 'System' },
+  { id: 'logs', label: 'Audit Logs', group: 'System' },
+  { id: 'media', label: 'Media Library', group: 'System' },
 ];
 
 export function Dashboard({ user, initialContent }: { user: SessionUser; initialContent: ContentMap }) {
-  const [active, setActive] = useState<Section>('hero');
+  const [active, setActive] = useState<Section>('home');
   const [values, setValues] = useState<ContentMap>(initialContent);
   const [status, setStatus] = useState('');
   const [pending, startTransition] = useTransition();
@@ -107,9 +91,12 @@ export function Dashboard({ user, initialContent }: { user: SessionUser; initial
           <span className="text-xs text-neutral-500">Admin</span>
         </div>
         <nav className="space-y-1">
-          {SECTIONS.map((s) => (
+          {SECTIONS.map((s, i) => (
+            <div key={s.id}>
+            {(i === 0 || SECTIONS[i - 1].group !== s.group) && (
+              <p className="mb-1 mt-4 px-3 text-[11px] font-semibold uppercase tracking-wide text-neutral-400 first:mt-0">{s.group}</p>
+            )}
             <button
-              key={s.id}
               onClick={() => setActive(s.id)}
               className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm ${
                 active === s.id ? 'bg-black text-white' : 'hover:bg-neutral-100'
@@ -122,6 +109,7 @@ export function Dashboard({ user, initialContent }: { user: SessionUser; initial
                 </span>
               )}
             </button>
+            </div>
           ))}
         </nav>
         <div className="mt-8 border-t border-neutral-200 pt-4 text-sm">
@@ -138,8 +126,8 @@ export function Dashboard({ user, initialContent }: { user: SessionUser; initial
           <h1 className="text-xl font-bold">{activeSection.label}</h1>
           <div className="flex items-center gap-3">
             <span className="text-sm text-neutral-500">{status}</span>
-            <a href="/" target="_blank" className="text-sm underline">
-              View site
+            <a href={activeSection.page ?? '/'} target="_blank" className="text-sm underline">
+              {activeSection.page ? 'View page' : 'View site'}
             </a>
             {activeSection.keys && (
               <button

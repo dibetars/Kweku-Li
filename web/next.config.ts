@@ -5,7 +5,10 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
   images: {
-    remotePatterns: [{ protocol: 'https', hostname: '*.public.blob.vercel-storage.com' }],
+    remotePatterns: [
+      { protocol: 'https', hostname: '*.public.blob.vercel-storage.com' },
+      { protocol: 'https', hostname: 'i.ytimg.com', pathname: '/vi/**' },
+    ],
   },
 };
 

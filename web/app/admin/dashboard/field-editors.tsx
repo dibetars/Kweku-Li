@@ -28,7 +28,7 @@ export function KeyEditor({ contentKey, value, onChange }: { contentKey: string;
   return (
     <section className="rounded-xl border border-neutral-200 p-4">
       <h2 className="mb-3 text-sm font-semibold">{def.label}</h2>
-      {'help' in def && def.help && <p className="-mt-2 mb-3 text-xs text-neutral-500">{def.help}</p>}
+      {def.help && <p className="-mt-2 mb-3 text-xs text-neutral-500">{def.help}</p>}
 
       {def.kind === 'text' &&
         (def.multiline ? (
@@ -68,16 +68,26 @@ function ObjectEditor({ fields, item, onChange }: { fields: FieldDef[]; item: It
 
 // ---------- List (add / remove / reorder items) ----------
 
+type ListDef = { itemLabel: string; titleField: string; fields: FieldDef[] };
+
+function blankFor(fields: FieldDef[]): Item {
+  const blank: Item = {};
+  for (const f of fields) blank[f.key] = f.type === 'lines' || f.type === 'images' || f.type === 'list' ? [] : '';
+  return blank;
+}
+
 function ListEditor({
   def,
   items,
   onChange,
+  nested = false,
 }: {
-  def: Extract<EditorDef, { kind: 'list' }>;
+  def: ListDef;
   items: Item[];
   onChange: (items: Item[]) => void;
+  nested?: boolean;
 }) {
-  const [open, setOpen] = useState<number | null>(items.length ? 0 : null);
+  const [open, setOpen] = useState<number | null>(!nested && items.length ? 0 : null);
 
   function update(i: number, item: Item) {
     onChange(items.map((it, idx) => (idx === i ? item : it)));
@@ -96,9 +106,7 @@ function ListEditor({
     setOpen(null);
   }
   function add() {
-    const blank: Item = {};
-    for (const f of def.fields) blank[f.key] = f.type === 'tags' || f.type === 'images' ? [] : f.type === 'stats' ? '[]' : '';
-    onChange([...items, blank]);
+    onChange([...items, blankFor(def.fields)]);
     setOpen(items.length);
   }
 
@@ -108,7 +116,7 @@ function ListEditor({
         const title = String(item[def.titleField] ?? '').trim() || `${def.itemLabel} ${i + 1}`;
         const isOpen = open === i;
         return (
-          <div key={i} className="rounded-lg border border-neutral-200">
+          <div key={i} className={`rounded-lg border border-neutral-200 ${nested ? 'bg-neutral-50' : ''}`}>
             <div className="flex items-center gap-2 px-3 py-2">
               <button type="button" onClick={() => setOpen(isOpen ? null : i)} className="flex-1 text-left text-sm">
                 <span className="mr-2 text-neutral-400">{i + 1}.</span>
@@ -132,7 +140,7 @@ function ListEditor({
           </div>
         );
       })}
-      <button type="button" onClick={add} className="rounded-lg bg-neutral-100 px-3 py-2 text-sm font-medium hover:bg-neutral-200">
+      <button type="button" onClick={add} className={nested ? BTN : 'rounded-lg bg-neutral-100 px-3 py-2 text-sm font-medium hover:bg-neutral-200'}>
         + Add {def.itemLabel.toLowerCase()}
       </button>
     </div>
@@ -165,48 +173,52 @@ function Field({ def, value, onChange }: { def: FieldDef; value: unknown; onChan
           <ImageField value={String(value ?? '')} onChange={onChange} />
         </div>
       );
-    case 'tags': {
-      const tags = Array.isArray(value) ? (value as string[]) : String(value ?? '').split(',');
+    case 'lines': {
+      const arr = Array.isArray(value) ? (value as string[]) : String(value ?? '').split('\n').filter(Boolean);
       return (
         <div className={wrap}>
           {label}
-          <input
-            value={tags.join(', ')}
-            onChange={(e) => onChange(e.target.value.split(',').map((s) => s.trim()).filter(Boolean))}
-            className={INPUT}
-            placeholder="Tag one, Tag two"
-          />
+          <LinesField value={arr} onChange={onChange} />
         </div>
       );
     }
     case 'images': {
       const imgs = Array.isArray(value) ? (value as string[]) : [];
-      const slots = [0, 1, 2];
+      const set = (next: string[]) => onChange(next);
       return (
         <div className={wrap}>
           {label}
-          <div className="grid gap-2 sm:grid-cols-3">
-            {slots.map((i) => (
-              <ImageField
-                key={i}
-                value={imgs[i] ?? ''}
-                compact
-                onChange={(v) => {
-                  const next = slots.map((j) => (j === i ? v : imgs[j] ?? ''));
-                  while (next.length && !next[next.length - 1]) next.pop();
-                  onChange(next);
-                }}
-              />
+          <div className="space-y-2">
+            {imgs.map((src, i) => (
+              <div key={i} className="flex items-start gap-2">
+                <div className="flex-1">
+                  <ImageField value={src} compact onChange={(v) => set(imgs.map((x, j) => (j === i ? v : x)))} />
+                </div>
+                <button type="button" className={BTN} disabled={i === 0} onClick={() => set(swap(imgs, i, i - 1))} title="Move up">
+                  ↑
+                </button>
+                <button type="button" className={`${BTN} text-red-600`} onClick={() => set(imgs.filter((_, j) => j !== i))} title="Remove">
+                  ✕
+                </button>
+              </div>
             ))}
+            <button type="button" className={BTN} onClick={() => set([...imgs, ''])}>
+              + Add image
+            </button>
           </div>
         </div>
       );
     }
-    case 'stats':
+    case 'list':
       return (
         <div className={wrap}>
           {label}
-          <StatsEditor value={String(value ?? '[]')} onChange={onChange} />
+          <ListEditor
+            nested
+            def={{ itemLabel: def.itemLabel ?? 'Item', titleField: def.titleField ?? '', fields: def.fields ?? [] }}
+            items={Array.isArray(value) ? (value as Item[]) : parseJson<Item[]>(String(value ?? '[]'), [])}
+            onChange={onChange}
+          />
         </div>
       );
     default:
@@ -219,37 +231,32 @@ function Field({ def, value, onChange }: { def: FieldDef; value: unknown; onChan
   }
 }
 
-// ---------- Stats (a JSON string of { number, label }[] inside a case study) ----------
+// ---------- Lines (a list of strings, one per line) ----------
 
-function StatsEditor({ value, onChange }: { value: string; onChange: (v: string) => void }) {
-  const stats = parseJson<Array<{ number: string; label: string }>>(value, []);
-  const set = (next: typeof stats) => onChange(JSON.stringify(next));
+// Keeps the raw text while typing so blank lines and trailing spaces are not eaten mid-edit.
+function LinesField({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
+  const [draft, setDraft] = useState(value.join('\n'));
+  const normalize = (text: string) => text.split('\n').map((l) => l.trim()).filter(Boolean);
+  // Resync only when the value changed from outside (e.g. items were reordered).
+  if (normalize(draft).join('\n') !== value.join('\n')) setDraft(value.join('\n'));
   return (
-    <div className="space-y-2">
-      {stats.map((s, i) => (
-        <div key={i} className="flex gap-2">
-          <input
-            value={s.number}
-            placeholder="21.7K"
-            onChange={(e) => set(stats.map((x, j) => (j === i ? { ...x, number: e.target.value } : x)))}
-            className={`${INPUT} w-32 flex-none`}
-          />
-          <input
-            value={s.label}
-            placeholder="First Week Streams"
-            onChange={(e) => set(stats.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))}
-            className={INPUT}
-          />
-          <button type="button" className={`${BTN} text-red-600`} onClick={() => set(stats.filter((_, j) => j !== i))}>
-            ✕
-          </button>
-        </div>
-      ))}
-      <button type="button" className={BTN} onClick={() => set([...stats, { number: '', label: '' }])}>
-        + Add stat
-      </button>
-    </div>
+    <textarea
+      value={draft}
+      rows={Math.min(10, Math.max(3, value.length + 1))}
+      onChange={(e) => {
+        setDraft(e.target.value);
+        onChange(normalize(e.target.value));
+      }}
+      className={INPUT}
+    />
   );
+}
+
+function swap<T>(arr: T[], i: number, j: number): T[] {
+  if (j < 0 || j >= arr.length) return arr;
+  const next = [...arr];
+  [next[i], next[j]] = [next[j], next[i]];
+  return next;
 }
 
 // ---------- Image (URL + upload + picker) ----------

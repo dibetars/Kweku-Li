@@ -16,3 +16,5 @@ data/
 uploads/
 package-lock.json
 !web/package-lock.json
+
+.backups/
