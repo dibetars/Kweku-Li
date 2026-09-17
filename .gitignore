@@ -5,6 +5,8 @@ dist/
 build/
 .env
 .env.*
+!.env.example
+!.env.local.example
 .vscode/
 .idea/
 coverage/
@@ -12,8 +14,8 @@ coverage/
 *.log.*
 *.tmp
 *.cache/
-data/
-uploads/
+/data/
+/uploads/
 package-lock.json
 !web/package-lock.json
 
