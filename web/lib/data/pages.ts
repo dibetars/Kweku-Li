@@ -67,7 +67,7 @@ export const FEATURED_CASES: FeaturedWorkItem[] = [ // featured.cases
 ];
 
 export const FEATURED_WORK: FeaturedWorkItem[] = [ // featured.work
-  { title: 'Tekura', year: '', category: 'Video copywriting', image: '', video: '', url: 'https://www.instagram.com/reel/CiVMa79jKTG/', caseStudy: '' },
+  { title: 'Tekura', year: '', category: 'Video copywriting', image: '/img/fw-tekura-cover.jpg', video: '', url: 'https://www.instagram.com/reel/CiVMa79jKTG/', caseStudy: '' },
   { title: 'The 5foot3 Story', year: '', category: 'Film', image: '', video: 'https://www.youtube.com/watch?v=IkioLhgPOzQ', url: '', caseStudy: '5foot3' },
   { title: 'Here I Am', year: '', category: 'Kinpee ft. Li & Evance', image: '', video: 'https://www.youtube.com/watch?v=I5FIkqipNjY', url: '', caseStudy: '' },
   { title: 'Welcome to the DVRE MOVEMENT', year: '', category: 'The Li Chronicles', image: '', video: 'https://www.youtube.com/watch?v=aNimMhiVQ8A', url: '', caseStudy: '' },
