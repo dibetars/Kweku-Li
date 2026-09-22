@@ -47,9 +47,9 @@ export const SERVICES: ServiceItem[] = [ // services.list
   },
   {
     icon: '📸',
-    title: 'Photography & Video Editing',
+    title: 'Photography',
     description:
-      "Commercial photography specializing in portraiture and fashion, with an acumen for video editing and content creation. Master's degree in Visual Communication from Ohio University with a focus on representation and storytelling.",
+      "Commercial photography specializing in portraiture and fashion. Master's degree in Visual Communication from Ohio University with a focus on representation and storytelling.",
   },
   {
     icon: '🎬',
@@ -91,7 +91,7 @@ export const SKILLS: SkillGroup[] = [ // skills.list
 export const SERVICE_OPTIONS = [ // options in the contact form
   'Digital Strategy & Creative Direction',
   'Copywriting & Journalism',
-  'Photography & Video Editing',
+  'Photography',
   'Executive Production',
   'Life, Career or Accountability Coaching',
   'Speaking Engagements & Workshops',
