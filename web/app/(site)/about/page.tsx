@@ -5,7 +5,11 @@ import { YouTube } from '@/components/site/youtube';
 import { ArrowLink, Paragraphs, TestimonialCard } from '@/components/site/ui';
 
 export const revalidate = 0;
-export const metadata: Metadata = { title: 'About | Kweku Diaw' };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await getSiteContent();
+  return { title: `About | ${s.brand.name}` };
+}
 
 export default async function AboutPage() {
   const s = await getSiteContent();
@@ -53,7 +57,7 @@ export default async function AboutPage() {
           <p className="section-kicker">Portfolio</p>
           <h2 className="section-title">A writer at heart</h2>
           <figure className="about-portfolio-figure">
-            <Media src="/img/about-portrait-tall.png" alt="Kweku Diaw in profile" sizes="(max-width: 980px) 100vw, 45vw" position="center 25%" />
+            <Media src="/img/portrait-garden.jpg" alt="Kweku Diaw seated outdoors" sizes="(max-width: 980px) 100vw, 45vw" position="center 45%" />
           </figure>
         </div>
         <div className="section-side-copy">
