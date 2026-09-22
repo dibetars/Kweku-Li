@@ -62,7 +62,7 @@ export const SERVICES: ServiceItem[] = [ // services.list
 export const FEATURED_CASES: FeaturedWorkItem[] = [ // featured.cases
   { title: 'Cincinnati Opera’s Black Opera Project: Lalovavi', year: '2026', category: 'Creative Direction', image: '/img/cs-lalovavi-stage.jpg', video: '', url: '', caseStudy: 'lalovavi' },
   { title: 'NEXT', year: '2026', category: 'Website & Socials', image: '/img/cs-next-cover.jpg', video: '', url: 'https://www.nextohio.com/', caseStudy: '' },
-  { title: 'Ohio University Music Industry Summit: The Launchpad MAG (Vol 2)', year: '2026', category: 'Creative Direction', image: '/img/cs-launchpad-cover.jpg', video: '', url: '', caseStudy: '' },
+  { title: 'Ohio University Music Industry Summit: The Launchpad MAG (Vol 2)', year: '2026', category: 'Creative Direction', image: '/img/cs-launchpad-cover.jpg', video: '', url: '', caseStudy: 'launchpad-mag' },
   { title: 'This Ability', year: '2025', category: 'Executive Production', image: '/img/cs-this-ability-cover.jpg', video: '', url: '', caseStudy: 'this-ability' },
 ];
 
@@ -163,7 +163,7 @@ export const PORTFOLIO_GROUPS: PortfolioGroup[] = [ // portfolio.groups
     entries: [
       { year: '2026', title: 'Cincinnati Opera’s Black Opera Project: Lalovavi', outlet: '', url: '', caseStudy: 'lalovavi', image: '/img/cs-lalovavi-stage.jpg' },
       { year: '2026', title: 'NEXT', outlet: '', url: 'https://www.nextohio.com/', caseStudy: '', image: '/img/cs-next-cover.jpg' },
-      { year: '2026', title: 'Ohio University Music Industry Summit: The Launchpad MAG (Vol 2)', outlet: '', url: '', caseStudy: '', image: '/img/cs-launchpad-cover.jpg' },
+      { year: '2026', title: 'Ohio University Music Industry Summit: The Launchpad MAG (Vol 2)', outlet: '', url: '', caseStudy: 'launchpad-mag', image: '/img/cs-launchpad-cover.jpg' },
       { year: '2025', title: 'Ananse’s Journey', outlet: '', url: 'https://www.anansesjourney.com/', caseStudy: '', image: '/img/cs-ananse-cover.jpg' },
       { year: '2025', title: 'Ohio University Music Industry Summit: The Launchpad MAG (Vol 1)', outlet: '', url: LAUNCHPAD_VOL1, caseStudy: '', image: '' },
       { year: '2026', title: 'Inaugural Scripps Career Success Day', outlet: '', url: '', caseStudy: 'scripps-career-success-day', image: '/img/cs-scripps-schedule.jpg' },
@@ -210,9 +210,10 @@ export const PORTFOLIO_GROUPS: PortfolioGroup[] = [ // portfolio.groups
     ],
   },
   {
-    title: 'Photography & Video Editing',
+    title: 'Photography',
     description: '',
     entries: [
+      { year: '', title: 'Photography Portfolio', outlet: '', url: 'https://app.notion.com/p/Photography-Portfolio-1943a70062e480e69446c1f66366d42e', caseStudy: '' },
       { year: '2025', title: 'Basiet x Frances', outlet: '', url: '', caseStudy: '' },
       { year: '2025', title: 'AfrOtakus: Black People & Cosplay', outlet: '', url: '', caseStudy: 'afrotakus', image: '/img/cs-afrotakus-cover.jpg' },
     ],

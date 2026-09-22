@@ -162,6 +162,91 @@ Developed under the creative movement 5footbreed, the project blends hip-hop, ch
     links: [],
   },
   {
+    slug: 'launchpad-mag',
+    title: 'The Launchpad MAG',
+    year: '2026',
+    category: 'Creative Direction',
+    client: 'Ohio University Music Industry Summit',
+    role: 'Concept, creative direction & editorial',
+    summary:
+      'A magazine built around the Launchpad Podcast, giving emerging Athens artists professional photography, editorial storytelling, and a marketing asset they can keep using.',
+    cover: '/img/cs-launchpad-cover.jpg',
+    stats: [
+      { number: '2', label: 'Consecutive editions curated' },
+      { number: 'Exclusive', label: 'Music Industry Summit component' },
+    ],
+    sections: [
+      {
+        heading: 'Brief',
+        body: `The Launchpad Podcast was created to spotlight and platform emerging artists at Ohio University and in Athens, Ohio. For underground artists and acts, building an audience can be difficult. Social media can provide visibility, but emerging artists often lack the broader storytelling, marketing, and promotional resources available to more established acts.
+
+The Launchpad Podcast helps close that gap by giving artists a platform to share their work, introduce themselves to new audiences, and build connections with potential fans. After an interview session with David, the current host of the Launchpad Podcast, I started thinking about how the Launchpad experience could extend beyond the podcast.
+
+The question became: what if an artist’s Launchpad appearance was more than an interview? What if it could become a complete creative experience, one that gave emerging artists photography, editorial storytelling, and physical and digital marketing assets they could keep using?
+
+That question became the foundation for The Launchpad MAG. Inspired by the cultural impact of publications such as XXL Magazine and its annual Freshman Class, I developed the concept of creating a magazine that would showcase Launchpad artists as a collective class of emerging talent.`,
+        bullets: [],
+      },
+      {
+        heading: 'The opportunity',
+        body: `The Launchpad already had an important asset: access to emerging talent. The opportunity was to build a larger media ecosystem around that access.
+
+The podcast gave artists a voice. The magazine could give them a visual identity and a tangible artifact. Photography could give them professional imagery. Editorial content could give audiences context about who they were. The Ohio University Music Industry Summit could give the project a larger platform. Together, these elements could transform Launchpad from a podcast into a broader artist discovery and storytelling platform.`,
+        bullets: [],
+      },
+      {
+        heading: 'Goals & objectives',
+        body: `The magazine had to work for the artists first, and then for the wider Launchpad brand. Each featured artist would come away with professional photography, editorial exposure, a physical representation of their work, digital content to share with their audiences, and association with a collective of emerging artists.`,
+        bullets: [
+          'Create a complete artist experience, with a cohesive photoshoot following each Launchpad interview.',
+          'Develop a physical and digital magazine that artists could use as an additional promotional tool.',
+          'Expand the Launchpad brand: podcast, interview, photoshoot, editorial feature, magazine, artist promotion.',
+          'Establish the magazine as an exclusive component of the Ohio University Music Industry Summit.',
+          'Build a repeatable creative platform rather than a one-time publication.',
+        ],
+      },
+      {
+        heading: 'Execution',
+        body: `I originated the concept for The Launchpad MAG after recognizing an opportunity to expand the Launchpad Podcast experience, developing the initial vision, identifying the inspiration, and establishing the magazine as an extension of the podcast and the Music Industry Summit.
+
+From there I assembled the creative team and collaborative partners needed to bring the concept to life, which meant coordinating different creative disciplines and aligning them around a single visual and editorial direction.
+
+As Creative Director for the photoshoot, I shaped the visual experience and made sure the photography supported the larger identity of the magazine, creating imagery that felt intentional and editorial rather than simply documenting the artists.
+
+I also contributed to the content and storytelling, thinking about how each artist would be represented not only visually but through their story, journey, and craft. The result was intended to make the magazine feel like a cultural publication rather than a collection of promotional materials.`,
+        bullets: [],
+      },
+      {
+        heading: 'Achievements & milestones',
+        body: `The success of the first edition led to an opportunity to continue the project, and I was called back for a second consecutive year to curate the next edition. What began as an idea developed from a conversation about the future of Launchpad had become a recurring creative initiative.`,
+        bullets: [
+          'Developed the original concept and established the magazine as an extension of the Launchpad Podcast.',
+          'Built the creative team and collaborative structure needed to execute the project.',
+          'Directed the magazine photoshoot experience.',
+          'Contributed to the editorial and content development.',
+          'Produced and released the first edition of The Launchpad MAG.',
+          'Created a physical and digital marketing asset for featured Launchpad artists.',
+          'Positioned the magazine as part of the broader Ohio University music ecosystem.',
+          'Returned for a second consecutive edition.',
+        ],
+      },
+      {
+        heading: 'My role',
+        body: '',
+        bullets: [
+          'Concept creator: originated the idea and developed the vision for how the magazine could expand the podcast experience.',
+          'Creative strategist: connected podcasting, photography, editorial storytelling, and print and digital marketing into added value for the artists and for Launchpad.',
+          'Team builder: brought together the creative team and collaborative partners required to turn the concept into a finished publication.',
+          'Creative director: directed the visual concept and photoshoot experience, helping establish the visual identity of the artists and the publication.',
+          'Content contributor: worked on the editorial development, translating the artists’ stories and creative identities into the publication.',
+        ],
+      },
+    ],
+    gallery: ['/img/cs-launchpad-2.jpg', '/img/cs-launchpad-3.jpg'],
+    videos: [],
+    links: [],
+  },
+  {
     slug: 'scripps-career-success-day',
     title: 'Inaugural Scripps Career Success Day',
     year: '2026',
