@@ -5,11 +5,7 @@ import { YouTube } from '@/components/site/youtube';
 import { ArrowLink, Paragraphs, TestimonialCard } from '@/components/site/ui';
 
 export const revalidate = 0;
-
-export async function generateMetadata(): Promise<Metadata> {
-  const s = await getSiteContent();
-  return { title: `About | ${s.brand.name}` };
-}
+export const metadata: Metadata = { title: 'About | Kweku Diaw' };
 
 export default async function AboutPage() {
   const s = await getSiteContent();
