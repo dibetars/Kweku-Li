@@ -103,9 +103,9 @@ export default async function BlogPostPage({ params }: Props) {
         </ul>
       )}
 
-      <footer className="post-foot">
+      <div className="post-foot">
         <ShareButtons url={postUrl(post.slug)} title={post.title} />
-      </footer>
+      </div>
 
       {next && next.slug !== post.slug && (
         <Link href={`/blog/${next.slug}`} className="case-next">
