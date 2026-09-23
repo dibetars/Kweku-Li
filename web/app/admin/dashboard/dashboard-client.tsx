@@ -22,6 +22,7 @@ type Section =
   | 'home'
   | 'featured'
   | 'casestudies'
+  | 'blog'
   | 'portfolio'
   | 'about'
   | 'testimonials'
@@ -47,6 +48,7 @@ const SECTIONS: { id: Section; label: string; group: string; keys?: string[]; pa
   { id: 'sensei', label: 'Sensei-Hood', group: 'Pages', page: '/sensei-hood', keys: ['sensei.page', 'mentors.list'] },
   { id: 'contact', label: 'Contact', group: 'Pages', page: '/contact', keys: ['contact.email', 'contact.phone', 'contact.location', 'social.linkedin', 'social.instagram', 'social.twitter', 'social.youtube', 'social.tiktok', 'social.soundcloud'] },
   { id: 'casestudies', label: 'Case Studies', group: 'Content', page: '/portfolio', keys: ['casestudies.list'] },
+  { id: 'blog', label: 'Blog', group: 'Content', page: '/blog', keys: ['blog.intro', 'blog.posts'] },
   { id: 'testimonials', label: 'Testimonials', group: 'Content', page: '/about#testimonials', keys: ['testimonials.list'] },
   { id: 'layout', label: 'Navigation & Footer', group: 'Content', keys: ['header.logo', 'header.cta', 'footer.quote', 'footer.copyright'] },
   { id: 'inbox', label: 'Inbox', group: 'System' },

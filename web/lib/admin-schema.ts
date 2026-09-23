@@ -225,6 +225,29 @@ export const EDITORS: Record<string, EditorDef> = {
   'social.tiktok': { kind: 'text', label: 'TikTok URL' },
   'social.soundcloud': { kind: 'text', label: 'SoundCloud URL' },
 
+  // ---------- Blog ----------
+  'blog.intro': { kind: 'text', label: 'Blog intro', multiline: true, help: 'Shown under the Blog heading and used as the page description for search engines.' },
+  'blog.posts': {
+    kind: 'list',
+    label: 'Posts',
+    help: 'Each post gets its own page at /blog/<slug>, a share row, and search-engine data.',
+    itemLabel: 'Post',
+    titleField: 'title',
+    fields: [
+      t('title', 'Title', { full: true }),
+      t('slug', 'Slug', { help: 'Lowercase words and dashes. Changing it changes the post address.' }),
+      t('date', 'Date published', { help: 'YYYY-MM-DD, e.g. 2026-09-23.' }),
+      t('updated', 'Date updated', { help: 'Optional. YYYY-MM-DD.' }),
+      t('author', 'Author', { help: 'Leave empty for Kweku Diaw.' }),
+      t('category', 'Category', { help: 'e.g. Essay, Interview, Field notes.' }),
+      t('status', 'Status', { help: 'Leave empty to publish. Type draft to keep it off the site.' }),
+      ta('excerpt', 'Summary', { help: 'One or two sentences. Shown on cards and used as the search-engine description.' }),
+      img('cover', 'Cover photo'),
+      ta('body', 'Post', { help: 'Leave a blank line between paragraphs. Start a line with ## for a heading, - for a bullet, > for a quote.' }),
+      lines('keywords', 'SEO keywords', { help: 'One per line. Used for search engines and shown as topic tags.' }),
+    ],
+  },
+
   // ---------- Navigation & footer ----------
   'header.logo': { kind: 'text', label: 'Logo text', help: 'Short, shown in a square badge. "Kweku Diaw" displays as KD.' },
   'header.cta': { kind: 'object', label: 'Header button', fields: [t('text', 'Text'), t('href', 'Link', { help: 'e.g. /contact' })] },

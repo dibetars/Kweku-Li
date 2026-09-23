@@ -24,6 +24,20 @@ export interface CaseSection {
   bullets: string[];
 }
 
+export interface BlogPost {
+  slug: string;
+  title: string;
+  date: string; // YYYY-MM-DD
+  updated: string; // YYYY-MM-DD, optional
+  author: string;
+  category: string;
+  status: string; // "draft" hides the post
+  excerpt: string; // card text and meta description
+  cover: string;
+  body: string;
+  keywords: string[]; // SEO keywords, shown as topic tags
+}
+
 export interface CaseStudy {
   slug: string;
   title: string;

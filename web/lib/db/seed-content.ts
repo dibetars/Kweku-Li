@@ -2,6 +2,7 @@
 // with the image fields and sections added in the editorial redesign.
 // This is the entire site's copy — do not re-author, only extend.
 import { CASE_STUDIES } from '../data/case-studies';
+import { BLOG_INTRO, BLOG_POSTS } from '../data/blog';
 import * as D from '../data/pages';
 
 // Keys for the multi-page site. Exported separately so an existing database can be moved onto them.
@@ -23,6 +24,8 @@ export const CONTENT_V2: Record<string, string> = {
   'contact.location': D.CONTACT_LOCATION,
   'header.cta': JSON.stringify({ text: 'Book A Call', href: '/contact' }),
   'casestudies.list': JSON.stringify(CASE_STUDIES),
+  'blog.intro': BLOG_INTRO,
+  'blog.posts': JSON.stringify(BLOG_POSTS),
   'about.page': JSON.stringify(D.ABOUT_PAGE),
   'portfolio.intro': D.PORTFOLIO_INTRO,
   'portfolio.groups': JSON.stringify(D.PORTFOLIO_GROUPS),
