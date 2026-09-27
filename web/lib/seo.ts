@@ -12,6 +12,17 @@ export function postUrl(slug: string): string {
   return absoluteUrl(`/blog/${slug}`);
 }
 
+// A Medium post is published there first, so Medium keeps the canonical URL and we stay out of
+// the sitemap for it. Everything written in the admin is canonical here.
+export function canonicalUrl(post: BlogPost): string {
+  return post.source === 'medium' && post.externalUrl ? post.externalUrl : postUrl(post.slug);
+}
+
+// True when the card should open Medium instead of a page on this site.
+export function isLinkOut(post: BlogPost): boolean {
+  return post.source === 'medium' && !!post.externalUrl && !post.body.trim();
+}
+
 // A post counts as published unless it is explicitly marked a draft.
 export function isPublished(p: BlogPost): boolean {
   return !!p.slug && !!p.title && p.status.trim().toLowerCase() !== 'draft';
@@ -53,9 +64,9 @@ export function blogPostingLd(post: BlogPost) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    '@id': `${postUrl(post.slug)}#article`,
-    mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl(post.slug) },
-    url: postUrl(post.slug),
+    '@id': `${canonicalUrl(post)}#article`,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl(post) },
+    url: canonicalUrl(post),
     headline: post.title,
     description: post.excerpt,
     ...(post.cover ? { image: [absoluteUrl(post.cover)] } : {}),
@@ -85,8 +96,8 @@ export function blogLd(posts: BlogPost[], description: string) {
     publisher,
     blogPost: posts.map((p) => ({
       '@type': 'BlogPosting',
-      '@id': `${postUrl(p.slug)}#article`,
-      url: postUrl(p.slug),
+      '@id': `${canonicalUrl(p)}#article`,
+      url: canonicalUrl(p),
       headline: p.title,
       description: p.excerpt,
       datePublished: p.date || undefined,

@@ -19,6 +19,7 @@ import type {
 } from './types';
 import { CASE_STUDIES } from './data/case-studies';
 import { BLOG_INTRO, BLOG_POSTS } from './data/blog';
+import { MEDIUM_DEFAULTS, type MediumSettings } from './medium';
 import * as D from './data/pages';
 
 // One typed view of the content table for every public page. Stored values win; the defaults in
@@ -64,6 +65,7 @@ export function buildSiteContent(c: ContentMap) {
     caseStudies: list<CaseStudy>(c['casestudies.list'], CASE_STUDIES).filter((cs) => cs.slug),
     blogIntro: text(c, 'blog.intro', BLOG_INTRO),
     blogPosts: list<BlogPost>(c['blog.posts'], BLOG_POSTS).filter((p) => p.slug),
+    medium: merged<MediumSettings>(c['medium.feed'], MEDIUM_DEFAULTS),
     about: merged<AboutPage>(c['about.page'], D.ABOUT_PAGE),
     portfolioIntro: text(c, 'portfolio.intro', D.PORTFOLIO_INTRO),
     portfolioGroups: list<PortfolioGroup>(c['portfolio.groups'], D.PORTFOLIO_GROUPS),

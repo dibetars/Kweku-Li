@@ -227,6 +227,16 @@ export const EDITORS: Record<string, EditorDef> = {
 
   // ---------- Blog ----------
   'blog.intro': { kind: 'text', label: 'Blog intro', multiline: true, help: 'Shown under the Blog heading and used as the page description for search engines.' },
+  'medium.feed': {
+    kind: 'object',
+    label: 'Medium feed',
+    help: 'Pulls your latest Medium posts into the blog automatically. Medium serves the 10 most recent.',
+    fields: [
+      t('url', 'Medium handle or feed URL', { full: true, help: 'e.g. @kwekudiaw, or a full medium.com/feed/... URL. Leave empty to turn the feed off.' }),
+      t('mode', 'Show', { help: 'full = read the article here, with a link back to Medium. link = the card opens Medium instead.' }),
+      t('category', 'Label on cards', { help: 'e.g. Medium.' }),
+    ],
+  },
   'blog.posts': {
     kind: 'list',
     label: 'Posts',

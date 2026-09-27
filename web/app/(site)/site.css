@@ -2937,3 +2937,48 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Images and origin line in posts pulled from a Medium feed. */
+.site .prose img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 1.75rem 0;
+    border-radius: var(--radius-md);
+}
+
+.site .prose figure {
+    margin: 1.75rem 0;
+}
+
+.site .prose figcaption {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.site .prose pre {
+    overflow-x: auto;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-md);
+    background: var(--bg-gradient-end);
+    font-size: 0.9rem;
+    margin-bottom: 1.4rem;
+}
+
+.site .prose a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.site .post-origin {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.site .post-origin a {
+    color: inherit;
+}

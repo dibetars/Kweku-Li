@@ -11,11 +11,14 @@ import {
   absoluteUrl,
   blogPostingLd,
   breadcrumbLd,
+  canonicalUrl,
   formatDate,
+  isLinkOut,
   postUrl,
   publishedPosts,
   readingMinutes,
 } from '@/lib/seo';
+import { fetchMediumPosts, mergePosts } from '@/lib/medium';
 
 export const revalidate = 0;
 
@@ -23,7 +26,8 @@ type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = publishedPosts((await getSiteContent()).blogPosts).find((p) => p.slug === slug);
+  const s = await getSiteContent();
+  const post = publishedPosts(mergePosts(s.blogPosts, await fetchMediumPosts(s.medium))).find((p) => p.slug === slug);
   if (!post) return { title: `Blog | ${SITE_NAME}` };
 
   const keywords = post.keywords.filter(Boolean);
@@ -34,10 +38,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: post.excerpt,
     ...(keywords.length ? { keywords } : {}),
     authors: [{ name: post.author || SITE_NAME }],
-    alternates: { canonical: postUrl(post.slug) },
+    alternates: { canonical: canonicalUrl(post) },
     openGraph: {
       type: 'article',
-      url: postUrl(post.slug),
+      url: canonicalUrl(post),
       title: post.title,
       description: post.excerpt,
       siteName: SITE_NAME,
@@ -53,9 +57,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
-  const posts = publishedPosts((await getSiteContent()).blogPosts);
+  const s = await getSiteContent();
+  const posts = publishedPosts(mergePosts(s.blogPosts, await fetchMediumPosts(s.medium)));
   const index = posts.findIndex((p) => p.slug === slug);
-  if (index === -1) notFound();
+  if (index === -1 || isLinkOut(posts[index])) notFound();
 
   const post = posts[index];
   const next = posts[index + 1] ?? posts[0];
@@ -82,6 +87,14 @@ export default async function BlogPostPage({ params }: Props) {
         <p className="post-byline">
           {[post.author || SITE_NAME, formatDate(post.date), `${readingMinutes(post.body)} min read`].filter(Boolean).join(' · ')}
         </p>
+        {post.source === 'medium' && post.externalUrl && (
+          <p className="post-origin">
+            Originally published on{' '}
+            <a href={post.externalUrl} target="_blank" rel="noopener">
+              Medium
+            </a>
+          </p>
+        )}
         <ShareButtons url={postUrl(post.slug)} title={post.title} />
       </header>
 
@@ -92,7 +105,12 @@ export default async function BlogPostPage({ params }: Props) {
       )}
 
       <div className="post-body">
-        <Prose text={post.body} />
+        {post.source === 'medium' ? (
+          // Already sanitized against an allowlist in lib/medium.ts.
+          <div className="prose" dangerouslySetInnerHTML={{ __html: post.body }} />
+        ) : (
+          <Prose text={post.body} />
+        )}
       </div>
 
       {keywords.length > 0 && (

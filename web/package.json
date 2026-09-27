@@ -14,13 +14,16 @@
   },
   "dependencies": {
     "@libsql/client": "^0.17.4",
+    "@types/sanitize-html": "^2.16.1",
     "@vercel/blob": "^2.8.0",
     "bcryptjs": "^3.0.3",
     "drizzle-orm": "^0.45.2",
+    "fast-xml-parser": "^5.11.1",
     "iron-session": "^8.0.4",
     "next": "16.3.1",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "sanitize-html": "^2.17.7",
     "uuid": "^14.0.2",
     "zod": "^4.4.3"
   },

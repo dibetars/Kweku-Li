@@ -15,7 +15,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: path === '/' ? 1 : 0.8,
   }));
 
-  const posts = publishedPosts(s.blogPosts).map((p) => ({
+  // Posts that live on Medium carry a canonical URL there, so they are not listed here.
+  const posts = publishedPosts(s.blogPosts).filter((p) => p.source !== 'medium').map((p) => ({
     url: `${SITE_URL}/blog/${p.slug}`,
     lastModified: p.updated || p.date ? new Date(p.updated || p.date) : now,
     changeFrequency: 'yearly' as const,

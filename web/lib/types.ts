@@ -36,6 +36,8 @@ export interface BlogPost {
   cover: string;
   body: string;
   keywords: string[]; // SEO keywords, shown as topic tags
+  source?: 'medium'; // set when the post came from the Medium feed
+  externalUrl?: string; // the Medium URL; used for the canonical link and "read on Medium"
 }
 
 export interface CaseStudy {
